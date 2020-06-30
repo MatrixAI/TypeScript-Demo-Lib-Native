@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "sourceMap": true,
+    "declaration": true,
+    "strictNullChecks": true,
+    "noImplicitAny": false,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "module": "CommonJS",
+    "target": "ES2018",
+    "baseUrl": ".",
+    "paths": {
+      "@library/*": ["src/lib/*"],
+    }
+  },
+  "include": [
+    "./src/**/*",
+    "./tests/**/*"
+  ]
+}

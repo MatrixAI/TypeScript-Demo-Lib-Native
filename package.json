@@ -1,0 +1,62 @@
+{
+  "name": "library",
+  "bin": {
+    "library": "bin/library",
+    "lib": "bin/library"
+  },
+  "version": "0.0.1",
+  "author": "John Smith",
+  "description": "Some Library that does stuff",
+  "keywords": [
+    "some-keyword"
+  ],
+  "contributors": [
+    "John Smith",
+    "Jane Doe"
+  ],
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MatrixAI/<git-repo>.git"
+  },
+  "main": "dist/library.js",
+  "types": "dist/index.d.ts",
+  "module": "dist/library.js",
+  "scripts": {
+    "build:library": "webpack --mode='production'",
+    "build:documentation": "typedoc",
+    "test": "jest"
+  },
+  "jest": {
+    "verbose": true
+  },
+  "engines": {
+    "node": ">=12.14.0"
+  },
+  "dependencies": {
+    "virtualfs": "^2.2.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.0.0",
+    "@types/node": "^13.13.1",
+    "copy-webpack-plugin": "^6.0.2",
+    "documentation": "^8.1.2",
+    "file-loader": "^6.0.0",
+    "jest": "^25.0.0",
+    "ts-jest": "^25.0.0",
+    "ts-loader": "^6.2.2",
+    "ts-node": "^8.8.2",
+    "tsconfig-paths": "^3.9.0",
+    "tsconfig-paths-webpack-plugin": "^3.2.0",
+    "typedoc": "^0.17.8",
+    "typedoc-webpack-plugin": "^1.1.4",
+    "typescript": "^3.8.3",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11",
+    "webpack-node-externals": "^1.7.2"
+  },
+  "bugs": {
+    "url": "https://github.com/MatrixAI/<git-repo>/issues"
+  },
+  "homepage": "https://github.com/MatrixAI/<git-repo>#readme"
+}

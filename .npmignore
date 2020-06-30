@@ -1,0 +1,9 @@
+.env
+/pkgs.nix
+/default.nix
+/shell.nix
+/webpack.config.js
+/tsconfig.json
+/doc
+/src
+/test
