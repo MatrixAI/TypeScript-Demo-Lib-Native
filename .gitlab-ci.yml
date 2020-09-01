@@ -8,6 +8,7 @@ cache:
 
 stages:
   - check
+  - build
 
 before_script:
   - node --version
@@ -18,3 +19,29 @@ prettier:
   image: node:12
   script:
     - npm run lint
+
+jest:
+  stage: check
+  image: node:12
+  script:
+    - npm run test
+
+nix-dry:
+  stage: check
+  script:
+    - nix-shell ./shell.nix
+    - nix-build -v -v --dry-run ./nix/default.nix -A library
+
+npm-build:
+  stage: build
+  image: node:12
+  script:
+    - npm run build:library
+    - npm run build:documentation
+
+nix-build:
+  stage: build
+  script:
+    - nix-shell ./shell.nix
+    - nix-build ./nix/default.nix -A library -o result-0
+
