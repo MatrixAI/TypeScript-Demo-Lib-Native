@@ -11,7 +11,6 @@ in
   drv.overrideAttrs (attrs: {
     src = null;
     nativeBuildInputs = [
-      gitlab-runner
       nodePackages.node2nix
     ] ++ (lib.attrByPath [ "nativeBuildInputs" ] [] attrs);
     shellHook = ''
