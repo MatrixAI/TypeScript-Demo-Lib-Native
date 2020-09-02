@@ -1,8 +1,8 @@
 class Library {
-  parameterOne: string;
+  someParam: string;
 
-  constructor(parameterOne: string = 'Parameter') {
-    this.parameterOne = parameterOne;
+  constructor(someParam: string = 'Parameter') {
+    this.someParam = someParam;
   }
 }
 

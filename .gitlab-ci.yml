@@ -1,47 +1,36 @@
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
 
-cache:
-  key: ${CI_COMMIT_REF_SLUG}
-  paths:
-    - node_modules/
-
 stages:
   - check
   - build
 
-before_script:
-  - node --version
-  - npm install
+image: registry.gitlab.com/matrixai/engineering/maintenance/gitlab-runner
 
-prettier:
+lint:
   stage: check
-  image: node:12
   script:
-    - npm run lint
+    - nix-shell --packages nodejs --run "npm install"
+    - nix-shell --packages nodejs --run "npm run lint"
 
-jest:
+test:
   stage: check
-  image: node:12
   script:
-    - npm run test
+    - nix-shell --packages nodejs --run "npm install"
+    - nix-shell --packages nodejs --run "npm run test"
 
 nix-dry:
   stage: check
-  image: registry.gitlab.com/matrixai/engineering/maintenance/gitlab-runner
   script:
-    - nix-shell --packages nodejs-12_x.all --run "nix-build -v -v --dry-run ./nix/default.nix"
+    - nix-build -v -v --dry-run ./release.nix --attr library
+    - nix-build -v -v --dry-run ./release.nix --attr application
 
-npm-build:
+nix:
   stage: build
-  image: node:12
   script:
-    - npm run build:library
-    - npm run build:documentation
-
-nix-build:
-  stage: build
-  image: registry.gitlab.com/matrixai/engineering/maintenance/gitlab-runner
-  script:
-    - nix-shell --packages nodejs-12_x.all --run "nix-build ./nix/default.nix -o result-0"
-
+    - >
+      nix-build ./release.nix
+      --attr application
+      --attr docker
+  only:
+    - master

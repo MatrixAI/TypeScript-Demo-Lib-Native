@@ -7,15 +7,15 @@
     "noImplicitAny": false,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
     "module": "CommonJS",
-    "target": "ES2018",
-    "baseUrl": ".",
+    "target": "ES2016",
+    "baseUrl": "./src",
     "paths": {
-      "@library/*": ["src/lib/*"],
+      "@typescript-demo-lib/*": ["*"]
     }
   },
   "include": [
-    "./src/**/*",
-    "./tests/**/*"
+    "./src/**/*"
   ]
 }
