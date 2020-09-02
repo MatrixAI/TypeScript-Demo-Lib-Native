@@ -36,15 +36,6 @@ const cliConfig = {
   plugins: [
     new ThreadsPlugin({
       globalObject: false
-    }),
-    new CopyPlugin({
-      patterns: [
-        {
-          from: 'src/**/*.proto',
-          to: '',
-          flatten: true
-        },
-      ]
     })
   ],
   watchOptions: {
@@ -85,15 +76,6 @@ const libraryConfig = {
   plugins: [
     new ThreadsPlugin({
       globalObject: false
-    }),
-    new CopyPlugin({
-      patterns: [
-        {
-          from: 'src/**/*.proto',
-          to: '',
-          flatten: true
-        },
-      ]
     })
   ],
   watchOptions: {
