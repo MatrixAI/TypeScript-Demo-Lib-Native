@@ -4,9 +4,8 @@
 
 with pkgs;
 let
-  nodeVersion = "12";
-  nodePackages = pkgs."nodePackages_${nodeVersion}_x";
   drv = callPackage ./default.nix {};
+  nodeVersion = builtins.elemAt (lib.versions.splitVersion drv.nodejs.version) 0;
 in
   drv.overrideAttrs (attrs: {
     src = null;
@@ -22,8 +21,7 @@ in
 
       export PATH="$(pwd)/dist/bin:$(npm bin):$PATH"
 
-      # setting up for nix-build
-      npm install --package-lock-only
+      npm install
       node2nix \
         --input package.json \
         --lock package-lock.json \
