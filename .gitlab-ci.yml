@@ -22,8 +22,8 @@ test:
 nix-dry:
   stage: check
   script:
-    - nix-build -v -v --dry-run ./release.nix --attr library
     - nix-build -v -v --dry-run ./release.nix --attr application
+    - nix-build -v -v --dry-run ./release.nix --attr docker
 
 nix:
   stage: build
