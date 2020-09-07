@@ -16,7 +16,6 @@
   "scripts": {
     "build": "tsc",
     "ts-node": "ts-node -r tsconfig-paths/register",
-    "doc": "typedoc",
     "test": "jest",
     "lint": "eslint '{src,tests}/**/*.{js,ts}'",
     "lintfix": "eslint '{src,tests}/**/*.{js,ts}' --fix"

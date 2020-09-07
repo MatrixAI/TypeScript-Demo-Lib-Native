@@ -1,6 +1,4 @@
-{
-  pkgs ? import ./pkgs.nix
-}:
+{ pkgs ? import ./pkgs.nix {} }:
 
 with pkgs;
 let
