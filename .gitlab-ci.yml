@@ -43,6 +43,8 @@ docs:
     - nix-shell --packages nodejs --run "./node_modules/.bin/typedoc --out /tmp/docs src"
     - >
         nix-shell -I nixpkgs=./pkgs.nix --packages findutils coreutils git gitAndTools.gh --run '
+        gh repo clone MatrixAI/TypeScript-Demo-Lib /tmp/TypeScript-Demo-Lib;
+        cd /tmp/TypeScript-Demo-Lib;
         git checkout gh-pages;
         find . -mindepth 1 -maxdepth 1 ! -name ".git" -exec rm -r "{}" \;;
         mv /tmp/docs/* .;
