@@ -1,4 +1,4 @@
-# TypeScript-Demo-LIb
+# TypeScript-Demo-Lib
 
 [![pipeline status](https://gitlab.com/MatrixAI/open-source/TypeScript-Demo-Lib/badges/master/pipeline.svg)](https://gitlab.com/MatrixAI/open-source/TypeScript-Demo-Lib/commits/master)
 
@@ -31,7 +31,26 @@ Install into Docker:
 docker load --input "$(nix-build ./release.nix --attr docker)"
 ```
 
-## Path Aliases
+## Development
+
+Run `nix-shell`, and once you're inside, you can use:
+
+```sh
+# install (or reinstall packages from package.json)
+npm install
+# build the dist
+npm run build
+# run the repl (this allows you to import from ./src)
+npm run ts-node
+# run the tests
+npm run test
+# lint the source code
+npm run lint
+# automatically fix the source
+npm run lintfix
+```
+
+### Path Aliases
 
 Due to https://github.com/microsoft/TypeScript/issues/10866, you cannot use path aliases without a bundler like Webpack to further transform the generated JavaScript code in order to resolve the path aliases. Because this is a simple library demonstrate, there's no need to use a bundler. In fact, for such libraries, it is far more efficient to not bundle the code.
 
