@@ -44,8 +44,8 @@ docs:
         nix-shell -I nixpkgs=./pkgs.nix --packages findutils coreutils git gitAndTools.gh --run '
         gh repo clone MatrixAI/TypeScript-Demo-Lib /tmp/TypeScript-Demo-Lib;
         cd /tmp/TypeScript-Demo-Lib;
+        gh repo fork --remote true;
         git checkout gh-pages;
-        git checkout -b gh-pages-new;
         find . -mindepth 1 -maxdepth 1 ! -name ".git" -exec rm -r "{}" \;;
         mv /tmp/docs/* .;
         git commit -am "Updated Docs";
