@@ -38,7 +38,6 @@ nix:
 docs:
   stage: build
   script:
-
     - nix-shell --packages nodejs --run "npm install"
     - nix-shell --packages nodejs --run "./node_modules/.bin/typedoc --out /tmp/docs src"
     - >
@@ -46,6 +45,7 @@ docs:
         gh repo clone MatrixAI/TypeScript-Demo-Lib /tmp/TypeScript-Demo-Lib;
         cd /tmp/TypeScript-Demo-Lib;
         git checkout gh-pages;
+        git checkout -b gh-pages-new;
         find . -mindepth 1 -maxdepth 1 ! -name ".git" -exec rm -r "{}" \;;
         mv /tmp/docs/* .;
         git commit -am "Updated Docs";
