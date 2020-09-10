@@ -65,6 +65,7 @@ typedoc --mode modules --out /tmp/docs src
 git checkout gh-pages
 find . -mindepth 1 -maxdepth 1 ! -name ".git" -exec rm -r "{}" \;
 mv /tmp/docs/* .;
+touch .nojekyll
 git commit -am "Updated Docs";
 git push
 ```
