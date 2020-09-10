@@ -1,20 +1,10 @@
-import { Library } from "@typescript-demo-lib/index";
+import { Library } from "@typescript-demo-lib";
 
 describe('index', () => {
 
-  let library: Library | null
-
-  beforeAll(async done => {
-    library = new Library('some param')
-		done()
-	})
-
-	afterAll(() => {
-		library = null
-	})
-
   test('some arbitrary test', () => {
-    expect(library?.someParam).toEqual('some param')
+    const librar = new Library('some param');
+    expect(library?.someParam).toEqual('some param');
   });
 
 });

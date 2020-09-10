@@ -10,14 +10,20 @@ image: registry.gitlab.com/matrixai/engineering/maintenance/gitlab-runner
 lint:
   stage: check
   script:
-    - nix-shell --packages nodejs --run "npm install"
-    - nix-shell --packages nodejs --run "npm run lint"
+    - >
+        nix-shell -I nixpkgs=./pkgs.nix --packages nodejs --run '
+        npm install;
+        npm run lint;
+        '
 
 test:
   stage: check
   script:
-    - nix-shell --packages nodejs --run "npm install"
-    - nix-shell --packages nodejs --run "npm run test"
+    - >
+        nix-shell -I nixpkgs=./pkgs.nix --packages nodejs --run '
+        npm install;
+        npm run test;
+        '
 
 nix-dry:
   stage: check
@@ -32,24 +38,5 @@ nix:
         nix-build ./release.nix
         --attr application
         --attr docker
-  only:
-    - master
-
-docs:
-  stage: build
-  script:
-    - nix-shell --packages nodejs --run "npm install"
-    - nix-shell --packages nodejs --run "./node_modules/.bin/typedoc --out /tmp/docs src"
-    - >
-        nix-shell -I nixpkgs=./pkgs.nix --packages findutils coreutils git gitAndTools.gh --run '
-        gh repo clone MatrixAI/TypeScript-Demo-Lib /tmp/TypeScript-Demo-Lib;
-        cd /tmp/TypeScript-Demo-Lib;
-        gh repo fork --remote true;
-        git checkout gh-pages;
-        find . -mindepth 1 -maxdepth 1 ! -name ".git" -exec rm -r "{}" \;;
-        mv /tmp/docs/* .;
-        git commit -am "Updated Docs";
-        gh pr create --base "gh-pages" --fill;
-        '
   only:
     - master

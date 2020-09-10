@@ -11,19 +11,19 @@ declare global {
 
 describe('Library class', () => {
 
-  let library: Library | null
+  let library: Library | null;
 
   beforeAll(async done => {
-    library = new Library('some param')
-		done()
+    library = new Library('some param');
+		done();
 	})
 
 	afterAll(() => {
-		library = null
+		library = null;
 	})
 
   test('some arbitrary test', () => {
-    expect(library?.someParam).toEqual('some param')
+    expect(library?.someParam).toEqual('some param');
   });
 
 });
