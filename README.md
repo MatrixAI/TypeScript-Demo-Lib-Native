@@ -68,3 +68,13 @@ mv /tmp/docs/* .;
 git commit -am "Updated Docs";
 git push
 ```
+
+### Publishing
+
+```sh
+# npm login
+npm version patch # major/minor/patch
+npm run build
+npm publish --access public
+git push --tags
+```
