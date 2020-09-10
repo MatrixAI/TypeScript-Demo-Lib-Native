@@ -69,6 +69,8 @@ git commit -am "Updated Docs";
 git push
 ```
 
+See the docs at: https://matrixai.github.io/TypeScript-Demo-Lib/
+
 ### Publishing
 
 ```sh
