@@ -1,4 +1,4 @@
-import Library from "@typescript-demo-lib/lib/Library"
+import Library from "@typescript-demo-lib/lib/Library";
 
 declare global {
   namespace NodeJS {
@@ -11,19 +11,19 @@ declare global {
 
 describe('Library class', () => {
 
-  let library: Library | null
+  let library: Library | null;
 
   beforeAll(async done => {
-    library = new Library('some param')
-		done()
+    library = new Library('some param');
+		done();
 	})
 
 	afterAll(() => {
-		library = null
+		library = null;
 	})
 
-  test('some arbitrary test', async () => {
-    expect(library?.someParam).toEqual('some param')
+  test('some arbitrary test', () => {
+    expect(library?.someParam).toEqual('some param');
   });
 
 });

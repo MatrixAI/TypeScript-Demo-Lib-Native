@@ -1,6 +1,6 @@
 {
-  "name": "typescript-demo-lib",
-  "version": "0.0.1",
+  "name": "@matrixai/typescript-demo-lib",
+  "version": "0.0.2",
   "bin": {
     "typescript-demo-lib": "dist/bin/typescript-demo-lib.js"
   },
@@ -18,7 +18,8 @@
     "ts-node": "ts-node -r tsconfig-paths/register",
     "test": "jest",
     "lint": "eslint '{src,tests}/**/*.{js,ts}'",
-    "lintfix": "eslint '{src,tests}/**/*.{js,ts}' --fix"
+    "lintfix": "eslint '{src,tests}/**/*.{js,ts}' --fix",
+    "typescript-demo-lib": "ts-node -r tsconfig-paths/register src/bin/typescript-demo-lib.ts"
   },
   "devDependencies": {
     "@types/jest": "^25.0.0",

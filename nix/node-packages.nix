@@ -5,9 +5,9 @@
 let
   sources = {};
   args = {
-    name = "typescript-demo-lib";
-    packageName = "typescript-demo-lib";
-    version = "0.0.1";
+    name = "_at_matrixai_slash_typescript-demo-lib";
+    packageName = "@matrixai/typescript-demo-lib";
+    version = "0.0.2";
     src = ./..;
     buildInputs = globalBuildInputs;
     meta = {
