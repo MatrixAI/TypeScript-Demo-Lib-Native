@@ -1,15 +1,6 @@
-import Library from "@typescript-demo-lib/lib/Library";
+import { Library } from "@typescript-demo-lib/index";
 
-declare global {
-  namespace NodeJS {
-    interface Global {
-      projectDir: string,
-      testDir: string
-    }
-  }
-}
-
-describe('Library class', () => {
+describe('index', () => {
 
   let library: Library | null
 
