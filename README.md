@@ -52,9 +52,9 @@ npm run lintfix
 
 ### Path Aliases
 
-Due to https://github.com/microsoft/TypeScript/issues/10866, you cannot use path aliases without a bundler like Webpack to further transform the generated JavaScript code in order to resolve the path aliases. Because this is a simple library demonstrate, there's no need to use a bundler. In fact, for such libraries, it is far more efficient to not bundle the code.
+Due to https://github.com/microsoft/TypeScript/issues/10866, you cannot use path aliases without a bundler like Webpack to further transform the generated JavaScript code in order to resolve the path aliases. Because this is a simple library demonstration, there's no need to use a bundler. In fact, for such libraries, it is far more efficient to not bundle the code.
 
-However we have left the path alias configuration in `tsconfig.json`, `jest.config.json` and in the tests we are making use of the `@typescript-demo-lib` alias.
+However we have left the path alias configuration in `tsconfig.json`, `jest.config.js` and in the tests we are making use of the `@typescript-demo-lib` alias.
 
 ### Docs Generation
 
