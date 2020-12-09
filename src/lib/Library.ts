@@ -1,7 +1,7 @@
 class Library {
   someParam: string;
 
-  constructor(someParam: string = 'Parameter') {
+  constructor(someParam = 'Parameter') {
     this.someParam = someParam;
   }
 }
