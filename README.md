@@ -50,6 +50,21 @@ npm run lint
 npm run lintfix
 ```
 
+### Using the REPL
+
+```
+$ npm run ts-node
+> import fs from 'fs';
+> fs
+> import { Library } from '@';
+> Library
+> import Library as Library2 from './src/lib/Library';
+```
+
+You can also create test files in `./src`, and run them with `npm run ts-node ./src/test.ts`.
+
+This allows you to test individual pieces of typescript code and it makes it easier when doing large scale rearchitecting of TypeScript code.
+
 ### Path Aliases
 
 Due to https://github.com/microsoft/TypeScript/issues/10866, you cannot use path aliases without a bundler like Webpack to further transform the generated JavaScript code in order to resolve the path aliases. Because this is a simple library demonstration, there's no need to use a bundler. In fact, for such libraries, it is far more efficient to not bundle the code.
