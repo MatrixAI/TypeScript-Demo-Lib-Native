@@ -1,4 +1,4 @@
-import Library from "@typescript-demo-lib/lib/Library";
+import Library from "@/lib/Library";
 
 declare global {
   namespace NodeJS {

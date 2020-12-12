@@ -1,4 +1,4 @@
-import main from "@typescript-demo-lib/bin/typescript-demo-lib";
+import main from "@/bin/typescript-demo-lib";
 
 describe('main', () => {
 

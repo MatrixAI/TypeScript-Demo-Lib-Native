@@ -1,4 +1,4 @@
-import { Library } from "@typescript-demo-lib";
+import { Library } from "@";
 
 describe('index', () => {
 

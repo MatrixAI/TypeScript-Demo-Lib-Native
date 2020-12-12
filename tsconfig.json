@@ -12,8 +12,8 @@
     "target": "ES2016",
     "baseUrl": "./src",
     "paths": {
-      "@typescript-demo-lib": ["index"],
-      "@typescript-demo-lib/*": ["*"]
+      "@": ["index"],
+      "@/*": ["*"]
     }
   },
   "include": [
