@@ -21,6 +21,9 @@
     "lintfix": "eslint '{src,tests}/**/*.{js,ts}' --fix",
     "typescript-demo-lib": "ts-node -r tsconfig-paths/register src/bin/typescript-demo-lib.ts"
   },
+  "dependencies": {
+    "uuid": "^8.3.0"
+  },
   "devDependencies": {
     "@types/jest": "^25.0.0",
     "@types/node": "^13.13.1",

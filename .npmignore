@@ -3,8 +3,6 @@
 /default.nix
 /shell.nix
 /release.nix
-/nix
-/webpack.config.js
 /tsconfig.json
 /src
 /tests

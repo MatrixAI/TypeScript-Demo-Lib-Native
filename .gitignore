@@ -1,7 +1,8 @@
+/tmp
 /dist
-/.env
-/result
-/result-*
+.env*
+!.env.example
+/result*
 
 # Logs
 logs
