@@ -21,7 +21,11 @@ let
       --nodejs-${nodeVersion}
   '';
   devPackage = (import (node2nixDrv true) { inherit pkgs nodejs; }).package;
-  prodDeps = ((import (node2nixDrv false) { inherit pkgs nodejs; }).shell.override {dontNpmInstall = true;}).nodeDependencies;
+  prodDeps = (
+    (import (node2nixDrv false) { inherit pkgs nodejs; }).shell.override {
+      dontNpmInstall = true;
+    }
+  ).nodeDependencies;
   drv = devPackage.overrideAttrs (attrs: {
     dontNpmInstall = true;
     postInstall = ''
