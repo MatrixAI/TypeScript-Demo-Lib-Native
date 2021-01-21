@@ -76,7 +76,7 @@ However we have left the path alias configuration in `tsconfig.json`, `jest.conf
 Remember to create `gh-pages` as an orphan branch first: `git checkout --orphan gh-pages`.
 
 ```sh
-typedoc --mode modules --out /tmp/docs src
+typedoc --out /tmp/docs src
 git checkout gh-pages
 find . -mindepth 1 -maxdepth 1 ! -name ".git" -exec rm -r "{}" \;
 mv /tmp/docs/* .;
