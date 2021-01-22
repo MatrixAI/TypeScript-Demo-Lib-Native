@@ -50,6 +50,16 @@ npm run lint
 npm run lintfix
 ```
 
+### Calling Executables
+
+When calling executables in development, use this style:
+
+```
+npm run typescript-demo-lib -- p1 p2 p3
+```
+
+The `--` is necessary to make `npm` understand that the parameters are for your own executable, and not parameters to `npm`.
+
 ### Using the REPL
 
 ```
