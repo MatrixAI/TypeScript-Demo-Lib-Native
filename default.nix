@@ -7,7 +7,7 @@
 }:
 
 let
-  src = nix-gitignore.gitignoreSource [] ./.;
+  src = nix-gitignore.gitignoreSource [".git"] ./.;
   nodeVersion = builtins.elemAt (lib.versions.splitVersion nodejs.version) 0;
   node2nixDrv = dev: runCommandNoCC "node2nix" {} ''
     mkdir $out
@@ -27,6 +27,7 @@ let
     }
   ).nodeDependencies;
   drv = devPackage.overrideAttrs (attrs: {
+    src = src;
     dontNpmInstall = true;
     postInstall = ''
       # The dependencies were prepared in the install phase
@@ -40,7 +41,7 @@ let
 
       # replace dev dependencies
       rm -rf $out/lib/node_modules/${attrs.packageName}/node_modules
-      ln -s ${prodDeps}/lib/node_modules $out/lib/node_modules/${attrs.packageName}/node_modules
+      cp -r ${prodDeps}/lib/node_modules $out/lib/node_modules/${attrs.packageName}/
 
       # Create symlink to the deployed executable folder, if applicable
       if [ -d "$out/lib/node_modules/.bin" ]
