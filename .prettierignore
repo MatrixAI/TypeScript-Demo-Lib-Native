@@ -1,8 +1,7 @@
 package-lock.json
 dist/
 docs/
-nix/
-*.nix/
+*.nix
 node_modules/
 LICENSE
 tests/
