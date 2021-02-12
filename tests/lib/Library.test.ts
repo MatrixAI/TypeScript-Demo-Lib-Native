@@ -1,29 +1,27 @@
-import Library from "@/lib/Library";
+import Library from '@/lib/Library';
 
 declare global {
   namespace NodeJS {
     interface Global {
-      projectDir: string,
-      testDir: string
+      projectDir: string;
+      testDir: string;
     }
   }
 }
 
 describe('Library class', () => {
-
   let library: Library | null;
 
-  beforeAll(async done => {
+  beforeAll(async (done) => {
     library = new Library('some param');
-		done();
-	})
+    done();
+  });
 
-	afterAll(() => {
-		library = null;
-	})
+  afterAll(() => {
+    library = null;
+  });
 
   test('some arbitrary test', () => {
     expect(library?.someParam).toEqual('some param');
   });
-
 });

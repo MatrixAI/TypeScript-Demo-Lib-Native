@@ -1,7 +1,0 @@
-package-lock.json
-dist/
-docs/
-*.nix
-node_modules/
-LICENSE
-tests/
