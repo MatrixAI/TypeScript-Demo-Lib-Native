@@ -43,9 +43,8 @@ let
   name = "${builtins.replaceStrings ["/" "@"] ["_" ""] node2nixDev.packageName}-${node2nixDev.version}";
   drv = runCommandNoCC name {} ''
     mkdir -p $out/lib/node_modules/${node2nixDev.packageName}
-    # copy only the dist and package.json
+    # copy only the dist
     cp -r ${node2nixDev}/lib/node_modules/${node2nixDev.packageName}/dist $out/lib/node_modules/${node2nixDev.packageName}/
-    cp -r ${node2nixDev}/lib/node_modules/${node2nixDev.packageName}/package.json $out/lib/node_modules/${node2nixDev.packageName}/
     # copy over the production dependencies
     cp -r ${node2nixProd}/lib/node_modules $out/lib/node_modules/${node2nixDev.packageName}/
     # create symlink to the deployed executable folder, if applicable
