@@ -83,16 +83,8 @@ However we have left the path alias configuration in `tsconfig.json`, `jest.conf
 
 ### Docs Generation
 
-Remember to create `gh-pages` as an orphan branch first: `git checkout --orphan gh-pages`.
-
 ```sh
-typedoc --out /tmp/docs src
-git checkout gh-pages
-find . -mindepth 1 -maxdepth 1 ! -name ".git" -exec rm -r "{}" \;
-mv /tmp/docs/* .;
-touch .nojekyll
-git commit -am "Updated Docs";
-git push
+npm run docs
 ```
 
 See the docs at: https://matrixai.github.io/TypeScript-Demo-Lib/

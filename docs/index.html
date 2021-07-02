@@ -123,14 +123,7 @@
 				<a href="#docs-generation" id="docs-generation" style="color: inherit; text-decoration: none;">
 					<h3>Docs Generation</h3>
 				</a>
-				<p>Remember to create <code>gh-pages</code> as an orphan branch first: <code>git checkout --orphan gh-pages</code>.</p>
-				<pre><code class="language-sh"><span style="color: #000000">typedoc --out /tmp/docs src</span>
-<span style="color: #000000">git checkout gh-pages</span>
-<span style="color: #000000">find </span><span style="color: #795E26">.</span><span style="color: #000000"> -mindepth 1 -maxdepth 1 ! -name </span><span style="color: #A31515">&quot;.git&quot;</span><span style="color: #000000"> -exec rm -r </span><span style="color: #A31515">&quot;{}&quot;</span><span style="color: #000000"> </span><span style="color: #EE0000">\;</span>
-<span style="color: #000000">mv /tmp/docs/* </span><span style="color: #795E26">.</span><span style="color: #000000">;</span>
-<span style="color: #000000">touch .nojekyll</span>
-<span style="color: #000000">git commit -am </span><span style="color: #A31515">&quot;Updated Docs&quot;</span><span style="color: #000000">;</span>
-<span style="color: #000000">git push</span>
+				<pre><code class="language-sh"><span style="color: #000000">npm run docs</span>
 </code></pre>
 				<p>See the docs at: <a href="https://matrixai.github.io/TypeScript-Demo-Lib/">https://matrixai.github.io/TypeScript-Demo-Lib/</a></p>
 				<a href="#publishing" id="publishing" style="color: inherit; text-decoration: none;">
