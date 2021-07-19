@@ -13,6 +13,13 @@
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "pkg": {
+    "assets": [
+      "node_modules/leveldown/**/*",
+      "node_modules/utp-native/**/*",
+      "dist/lib/workers/worker.js"
+    ]
+  },
   "scripts": {
     "build": "tsc -p ./tsconfig.build.json",
     "ts-node": "ts-node -r tsconfig-paths/register",
@@ -23,6 +30,9 @@
     "typescript-demo-lib": "ts-node -r tsconfig-paths/register src/bin/typescript-demo-lib.ts"
   },
   "dependencies": {
+    "level": "^7.0.0",
+    "threads": "^1.6.5",
+    "utp-native": "^2.5.3",
     "uuid": "^8.3.0"
   },
   "devDependencies": {
@@ -35,7 +45,7 @@
     "eslint-plugin-prettier": "^3.3.1",
     "jest": "^26.6.3",
     "jest-mock-process": "^1.4.0",
-    "pkg": "^5.3.0",
+    "pkg": "5.3.1",
     "prettier": "^2.2.1",
     "ts-jest": "^26.4.4",
     "ts-node": "^9.1.1",

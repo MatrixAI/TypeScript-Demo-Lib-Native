@@ -2,6 +2,11 @@
 
 with pkgs;
 let
+  pkg = pkgs.nodePackages.pkg.override {
+    postFixup = ''
+      patch -p0 < ${./nix/leveldown.patch}
+    '';
+  };
   utils = callPackage ./utils.nix {};
   buildElf = arch:
     stdenv.mkDerivation rec {
@@ -9,7 +14,7 @@ let
       version = utils.node2nixDev.version;
       src = "${utils.node2nixDev}/lib/node_modules/${utils.node2nixDev.packageName}";
       buildInputs = [
-        nodePackages.pkg
+         pkg
       ];
       PKG_CACHE_PATH = utils.pkgCachePath;
       PKG_IGNORE_TAG = 1;
@@ -18,7 +23,9 @@ let
         pkg . \
           --targets linux-${arch} \
           --no-bytecode \
-          --output out
+          --public-packages "*" \
+          --output out\
+          --verbose
       '';
       installPhase = ''
         cp out $out
@@ -31,7 +38,7 @@ let
       version = utils.node2nixDev.version;
       src = "${utils.node2nixDev}/lib/node_modules/${utils.node2nixDev.packageName}";
       buildInputs = [
-        nodePackages.pkg
+        pkg
       ];
       PKG_CACHE_PATH = utils.pkgCachePath;
       PKG_IGNORE_TAG = 1;
@@ -40,6 +47,7 @@ let
         pkg . \
           --targets win-${arch} \
           --no-bytecode \
+          --public-packages "*" \
           --output out.exe
       '';
       installPhase = ''
@@ -53,7 +61,7 @@ let
       version = utils.node2nixDev.version;
       src = "${utils.node2nixDev}/lib/node_modules/${utils.node2nixDev.packageName}";
       buildInputs = [
-        nodePackages.pkg
+        pkg
       ];
       PKG_CACHE_PATH = utils.pkgCachePath;
       PKG_IGNORE_TAG = 1;
@@ -62,6 +70,7 @@ let
         pkg . \
           --targets macos-${arch} \
           --no-bytecode \
+          --public-packages "*" \
           --output out
       '';
       installPhase = ''

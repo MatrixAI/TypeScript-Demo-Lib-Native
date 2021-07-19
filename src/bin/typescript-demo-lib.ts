@@ -4,8 +4,11 @@ import process from 'process';
 import Library from '../lib/Library';
 import NumPair from '../lib/NumPair';
 import { v4 as uuidv4 } from 'uuid';
+import testWorkers from '../lib/workers/test-workers';
+import testLevel from '../lib/test-level';
+import testUptNative from '../lib/test-utp-native';
 
-function main(argv = process.argv): number {
+async function main(argv = process.argv): Promise<number> {
   // Print out command-line arguments
   const argArray = argv.slice(2);
   const args = argArray.toString();
@@ -23,6 +26,11 @@ function main(argv = process.argv): number {
   const nums = new NumPair(parseInt(argArray[0]), parseInt(argArray[1]));
   const sum = nums.num1 + nums.num2;
   process.stdout.write(nums.num1 + ' + ' + nums.num2 + ' = ' + sum + '\n');
+
+  // Testing native modules.
+  await testLevel(argv[0]);
+  await testWorkers();
+  await testUptNative();
 
   process.exitCode = 0;
   return process.exitCode;

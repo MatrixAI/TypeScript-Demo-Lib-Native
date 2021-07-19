@@ -26,12 +26,14 @@ rec {
   '';
   # the shell attribute has the nodeDependencies, whereas the package does not
   node2nixProd = (
-    (import (node2nixDrv false) { inherit pkgs nodejs; }).shell.override {
+    (import (node2nixDrv false) { inherit pkgs nodejs; }).shell.override (attrs: {
+      buildInputs = attrs.buildInputs ++ [ nodePackages.node-gyp-build ];
       dontNpmInstall = true;
-    }
+    })
   ).nodeDependencies;
-  node2nixDev = (import (node2nixDrv true) { inherit pkgs nodejs; }).package.overrideAttrs (attrs: {
+  node2nixDev = (import (node2nixDrv true) { inherit pkgs nodejs; }).package.override (attrs: {
     src = src;
+    buildInputs = attrs.buildInputs ++ [ nodePackages.node-gyp-build ];
     dontNpmInstall = true;
     postInstall = ''
       # The dependencies were prepared in the install phase
