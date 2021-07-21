@@ -20,7 +20,7 @@ function main(argv = process.argv): number {
   process.stdout.write(uuidv4() + '\n');
 
   // Add the first two command-line args and print the result
-  const nums = new NumPair(parseInt(argv[2]), parseInt(argv[3]));
+  const nums = new NumPair(parseInt(argArray[0]), parseInt(argArray[1]));
   const sum = nums.num1 + nums.num2;
   process.stdout.write(nums.num1 + ' + ' + nums.num2 + ' = ' + sum + '\n');
 
