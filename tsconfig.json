@@ -15,9 +15,11 @@
     "paths": {
       "@": ["index"],
       "@/*": ["*"]
-    }
+    },
+    "noEmit": true
   },
   "include": [
-    "./src/**/*"
+    "./src/**/*",
+    "./tests/**/*"
   ]
 }
