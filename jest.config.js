@@ -2,14 +2,14 @@ const { pathsToModuleNameMapper } = require('ts-jest/utils');
 const { compilerOptions } = require('./tsconfig');
 
 module.exports = {
-  "verbose": true,
-  "roots": [
+  verbose: true,
+  roots: [
     "<rootDir>/tests"
   ],
-  "testMatch": [
+  testMatch: [
     "**/?(*.)+(spec|test|unit.test).+(ts|tsx|js)"
   ],
-  "transform": {
+  transform: {
     "^.+\\.tsx?$": "ts-jest"
   },
   setupFiles: [
