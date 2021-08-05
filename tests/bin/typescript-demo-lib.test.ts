@@ -23,12 +23,12 @@ describe('main', () => {
     // jest can also "spy on" the console object
     // and then you can test on stdout
     const mockLog = mockProcessStdout();
-    expect(await main([dataDir, '', '1', '2'])).toEqual(0);
+    expect(await main(['', '', '1', '2', dataDir])).toEqual(0);
     mockLog.mockRestore();
   });
   test('no input', async () => {
     const mockLog = mockProcessStdout();
-    await main([dataDir, '']);
+    await main([]);
     const tmpMockLog = mockLog.mock.calls.join('');
     expect(tmpMockLog).toContain('[]\n');
     expect(tmpMockLog).toContain('new library\n');
@@ -38,7 +38,7 @@ describe('main', () => {
   }, 20000);
   test('adds 0 + 0', async () => {
     const mockLog = mockProcessStdout();
-    await main([dataDir, '', '0', '0']);
+    await main(['', '', '0', '0', dataDir]);
     const tmpMockLog = mockLog.mock.calls.join('');
     expect(tmpMockLog).toContain('[0,0]\n');
     expect(tmpMockLog).toContain('new library\n');
@@ -48,7 +48,7 @@ describe('main', () => {
   });
   test('adds 0 + 1', async () => {
     const mockLog = mockProcessStdout();
-    await main([dataDir, '', '0', '1']);
+    await main(['', '', '0', '1', dataDir]);
     const tmpMockLog = mockLog.mock.calls.join('');
     expect(tmpMockLog).toContain('[0,1]\n');
     expect(tmpMockLog).toContain('new library\n');
@@ -58,7 +58,7 @@ describe('main', () => {
   });
   test('adds 1 + 0', async () => {
     const mockLog = mockProcessStdout();
-    await main([dataDir, '', '1', '0']);
+    await main(['', '', '1', '0', dataDir]);
     const tmpMockLog = mockLog.mock.calls.join('');
     expect(tmpMockLog).toContain('[1,0]\n');
     expect(tmpMockLog).toContain('new library\n');
@@ -68,7 +68,7 @@ describe('main', () => {
   });
   test('adds 7657 + 238947', async () => {
     const mockLog = mockProcessStdout();
-    await main([dataDir, '', '7657', '238947']);
+    await main(['', '', '7657', '238947', dataDir]);
     const tmpMockLog = mockLog.mock.calls.join('');
     expect(tmpMockLog).toContain('[7657,238947]\n');
     expect(tmpMockLog).toContain('new library\n');
@@ -78,7 +78,7 @@ describe('main', () => {
   });
   test('level should work.', async () => {
     const mockLog = mockProcessStdout();
-    await main([dataDir]);
+    await main(['', '', '', '', dataDir]);
     const tmpMockLog = mockLog.mock.calls.join('');
     expect(tmpMockLog).toContain('lets test some levelDB');
     expect(tmpMockLog).toContain('hello Level!');
@@ -86,7 +86,7 @@ describe('main', () => {
   });
   test('Worker threads should work.', async () => {
     const mockLog = mockProcessStdout();
-    await main([dataDir]);
+    await main(['', '', '', '', dataDir]);
     const tmpMockLog = mockLog.mock.calls.join('');
     expect(tmpMockLog).toContain('Lets test workers.');
     expect(tmpMockLog).toContain('Hello Worker!');
@@ -94,7 +94,7 @@ describe('main', () => {
   });
   test('utp-native should work.', async () => {
     const mockLog = mockProcessStdout();
-    await main([dataDir]);
+    await main(['', '', '', '', dataDir]);
     const tmpMockLog = mockLog.mock.calls.join('');
     expect(tmpMockLog).toContain('Lets test utp-native.');
     expect(tmpMockLog).toContain('hello UTP!!');
