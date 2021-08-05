@@ -73,13 +73,13 @@ $ npm run ts-node
 
 You can also create test files in `./src`, and run them with `npm run ts-node ./src/test.ts`.
 
-This allows you to test individual pieces of typescript code and it makes it easier when doing large scale rearchitecting of TypeScript code.
+This allows you to test individual pieces of typescript code, and it makes it easier when doing large scale architecting of TypeScript code.
 
 ### Path Aliases
 
 Due to https://github.com/microsoft/TypeScript/issues/10866, you cannot use path aliases without a bundler like Webpack to further transform the generated JavaScript code in order to resolve the path aliases. Because this is a simple library demonstration, there's no need to use a bundler. In fact, for such libraries, it is far more efficient to not bundle the code.
 
-However we have left the path alias configuration in `tsconfig.json`, `jest.config.js` and in the tests we are making use of the `@` alias.
+However, we have left the path alias configuration in `tsconfig.json`, `jest.config.js` and in the tests we are making use of the `@` alias.
 
 #### VSCode Path Aliases
 
@@ -98,6 +98,70 @@ To resolve this, add `./tests/**/*` into the `tsconfig` `include` section:
 This will however make `tsc` build the `tests` into the `dist` output.
 
 **Therefore this fix should only be done in your own workspace, do not commit or push this change up.**
+
+### Native Module Toolchain
+
+There are some nuances when packaging with native modules.
+Included native modules are level witch include leveldown and utp-native.
+
+If a module is not set to public then pkg defaults to including it as bytecode.
+To avoid this breaking with the `--no-bytecode` flag we need to add `--public-packages "*"`
+
+#### leveldown
+
+To get leveldown to work with pkg we need to include the prebuilds with the executable.
+after building with pkg you need to copy from `node_modules/leveldown/prebuilds` -> `path_to_executable/prebuilds`
+You only need to include the prebuilds for the arch you are targeting. e.g. for linux-x64 you need `prebuild/linux-x64`.
+
+The folder structure for the executable should look like this.
+- linux_executable_elf
+- prebuilds
+  - linux-x64
+    - (node files)
+
+#### utp-native
+
+Including utp-native is simpler, you just need to add it as an asset for pkg.
+Add the following lines to the package.json.
+```json
+"pkg": {
+    "assets": "node_modules/utp-native/**/*"
+  }
+```
+
+#### threads.js
+
+To make sure that the worker threads work properly you need to include the compiled worker scripts as an asset.
+This can be fixed by adding the following to `package.json`
+
+```json
+"pkg": {
+    "assets": "dist/bin/worker.js"
+  }
+```
+
+If you need to include multiple assets then add them as an array.
+
+```json
+"pkg": {
+    "assets": [
+      "node_modules/utp-native/**/*",
+      "dist/bin/worker.js"
+    ]
+  }
+```
+
+#### Integration into Nix
+
+Nix build uses node2nix to create the dependencies of the node modules. this does a fairly good job of detecting dependencies but with native modules it may fail to detect CLI tools like `node-gyp-build`.
+
+To ensure the proper dependencies exist while building we need to bring in these utilities during the build:
+
+```
+buildInputs = attrs.buildInputs ++ [ nodePackages.node-gyp-build ];
+```
+
+This has to be done to both `node2nixProd` and `node2nixDev`.
 
 ### Docs Generation
 

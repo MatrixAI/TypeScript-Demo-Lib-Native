@@ -4,12 +4,14 @@ import process from 'process';
 import Library from '../lib/Library';
 import NumPair from '../lib/NumPair';
 import { v4 as uuidv4 } from 'uuid';
+import testWorkers from '../lib/workers/test-workers';
+import testLevel from '../lib/test-level';
+import testUptNative from '../lib/test-utp-native';
 
-function main(argv = process.argv): number {
+async function main(argv = process.argv): Promise<number> {
   // Print out command-line arguments
-  const argArray = argv.slice(2);
-  const args = argArray.toString();
-  process.stdout.write('[' + args + ']\n');
+  argv = argv.slice(2); // Removing prepended file paths.
+  process.stdout.write('[' + argv.slice(0, 2).toString() + ']\n');
 
   // Create a new Library with the value someParam = 'new library'
   // And print it out
@@ -20,9 +22,15 @@ function main(argv = process.argv): number {
   process.stdout.write(uuidv4() + '\n');
 
   // Add the first two command-line args and print the result
-  const nums = new NumPair(parseInt(argArray[0]), parseInt(argArray[1]));
+  const nums = new NumPair(parseInt(argv[0]), parseInt(argv[1]));
   const sum = nums.num1 + nums.num2;
   process.stdout.write(nums.num1 + ' + ' + nums.num2 + ' = ' + sum + '\n');
+
+  // Testing native modules.
+  const dir = argv[2] ?? '.';
+  await testLevel(dir);
+  await testWorkers();
+  await testUptNative();
 
   process.exitCode = 0;
   return process.exitCode;

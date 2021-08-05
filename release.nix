@@ -9,16 +9,20 @@ let
       version = utils.node2nixDev.version;
       src = "${utils.node2nixDev}/lib/node_modules/${utils.node2nixDev.packageName}";
       buildInputs = [
-        nodePackages.pkg
+        utils.pkg
       ];
       PKG_CACHE_PATH = utils.pkgCachePath;
       PKG_IGNORE_TAG = 1;
+      # ensure that native modules are built from source
+      npm_config_build_from_source = "true";
       buildPhase = ''
         cp ${./package.json} package.json
         pkg . \
           --targets linux-${arch} \
           --no-bytecode \
-          --output out
+          --public-packages "*" \
+          --output out\
+          --verbose
       '';
       installPhase = ''
         cp out $out
@@ -31,15 +35,18 @@ let
       version = utils.node2nixDev.version;
       src = "${utils.node2nixDev}/lib/node_modules/${utils.node2nixDev.packageName}";
       buildInputs = [
-        nodePackages.pkg
+        utils.pkg
       ];
       PKG_CACHE_PATH = utils.pkgCachePath;
       PKG_IGNORE_TAG = 1;
+      # ensure that native modules are built from source
+      npm_config_build_from_source = "true";
       buildPhase = ''
         cp ${./package.json} package.json
         pkg . \
           --targets win-${arch} \
           --no-bytecode \
+          --public-packages "*" \
           --output out.exe
       '';
       installPhase = ''
@@ -53,15 +60,18 @@ let
       version = utils.node2nixDev.version;
       src = "${utils.node2nixDev}/lib/node_modules/${utils.node2nixDev.packageName}";
       buildInputs = [
-        nodePackages.pkg
+        utils.pkg
       ];
       PKG_CACHE_PATH = utils.pkgCachePath;
       PKG_IGNORE_TAG = 1;
+      # ensure that native modules are built from source
+      npm_config_build_from_source = "true";
       buildPhase = ''
         cp ${./package.json} package.json
         pkg . \
           --targets macos-${arch} \
           --no-bytecode \
+          --public-packages "*" \
           --output out
       '';
       installPhase = ''
