@@ -18,6 +18,8 @@ let
       ];
       PKG_CACHE_PATH = utils.pkgCachePath;
       PKG_IGNORE_TAG = 1;
+      # ensure that native modules are built from source
+      npm_config_build_from_source = "true";
       buildPhase = ''
         cp ${./package.json} package.json
         pkg . \
@@ -42,6 +44,8 @@ let
       ];
       PKG_CACHE_PATH = utils.pkgCachePath;
       PKG_IGNORE_TAG = 1;
+      # ensure that native modules are built from source
+      npm_config_build_from_source = "true";
       buildPhase = ''
         cp ${./package.json} package.json
         pkg . \
@@ -65,6 +69,8 @@ let
       ];
       PKG_CACHE_PATH = utils.pkgCachePath;
       PKG_IGNORE_TAG = 1;
+      # ensure that native modules are built from source
+      npm_config_build_from_source = "true";
       buildPhase = ''
         cp ${./package.json} package.json
         pkg . \
