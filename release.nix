@@ -2,11 +2,6 @@
 
 with pkgs;
 let
-  pkg = pkgs.nodePackages.pkg.override {
-    postFixup = ''
-      patch -p0 < ${./nix/leveldown.patch}
-    '';
-  };
   utils = callPackage ./utils.nix {};
   buildElf = arch:
     stdenv.mkDerivation rec {
@@ -14,7 +9,7 @@ let
       version = utils.node2nixDev.version;
       src = "${utils.node2nixDev}/lib/node_modules/${utils.node2nixDev.packageName}";
       buildInputs = [
-        pkg
+        utils.pkg
       ];
       PKG_CACHE_PATH = utils.pkgCachePath;
       PKG_IGNORE_TAG = 1;
@@ -40,7 +35,7 @@ let
       version = utils.node2nixDev.version;
       src = "${utils.node2nixDev}/lib/node_modules/${utils.node2nixDev.packageName}";
       buildInputs = [
-        pkg
+        utils.pkg
       ];
       PKG_CACHE_PATH = utils.pkgCachePath;
       PKG_IGNORE_TAG = 1;
@@ -65,7 +60,7 @@ let
       version = utils.node2nixDev.version;
       src = "${utils.node2nixDev}/lib/node_modules/${utils.node2nixDev.packageName}";
       buildInputs = [
-        pkg
+        utils.pkg
       ];
       PKG_CACHE_PATH = utils.pkgCachePath;
       PKG_IGNORE_TAG = 1;

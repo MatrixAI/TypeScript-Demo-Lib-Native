@@ -82,4 +82,9 @@ rec {
             path = pkgBuild.macos-x64;
           }
         ];
+  pkg = pkgs.nodePackages.pkg.override {
+    postFixup = ''
+      patch -p0 < ${./nix/leveldown.patch}
+    '';
+  };
 }
