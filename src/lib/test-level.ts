@@ -5,7 +5,7 @@ import path from 'path';
 // Level tests.
 async function testLevel(dir: string) {
   process.stdout.write('lets test some levelDB\n');
-  const db = level(path.join(dir, 'daDb'));
+  const db = level(path.join(dir, 'levelDB'));
   const key = 'hello';
   const value = 'Level!';
   await db.put(key, value);
