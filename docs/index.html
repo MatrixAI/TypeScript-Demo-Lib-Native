@@ -114,12 +114,83 @@
 <span style="color: #000000">&gt; </span><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">Library</span><span style="color: #000000"> </span><span style="color: #AF00DB">as</span><span style="color: #000000"> </span><span style="color: #001080">Library2</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;./src/lib/Library&#039;</span><span style="color: #000000">;</span>
 </code></pre>
 				<p>You can also create test files in <code>./src</code>, and run them with <code>npm run ts-node ./src/test.ts</code>.</p>
-				<p>This allows you to test individual pieces of typescript code and it makes it easier when doing large scale rearchitecting of TypeScript code.</p>
+				<p>This allows you to test individual pieces of typescript code, and it makes it easier when doing large scale architecting of TypeScript code.</p>
 				<a href="#path-aliases" id="path-aliases" style="color: inherit; text-decoration: none;">
 					<h3>Path Aliases</h3>
 				</a>
 				<p>Due to <a href="https://github.com/microsoft/TypeScript/issues/10866">https://github.com/microsoft/TypeScript/issues/10866</a>, you cannot use path aliases without a bundler like Webpack to further transform the generated JavaScript code in order to resolve the path aliases. Because this is a simple library demonstration, there&#39;s no need to use a bundler. In fact, for such libraries, it is far more efficient to not bundle the code.</p>
-				<p>However we have left the path alias configuration in <code>tsconfig.json</code>, <code>jest.config.js</code> and in the tests we are making use of the <code>@</code> alias.</p>
+				<p>However, we have left the path alias configuration in <code>tsconfig.json</code>, <code>jest.config.js</code> and in the tests we are making use of the <code>@</code> alias.</p>
+				<a href="#vscode-path-aliases" id="vscode-path-aliases" style="color: inherit; text-decoration: none;">
+					<h4>VSCode Path Aliases</h4>
+				</a>
+				<p>VSCode cannot follow path aliases in our tests due to
+				<a href="https://github.com/microsoft/vscode/issues/94474">https://github.com/microsoft/vscode/issues/94474</a>.</p>
+				<p>To resolve this, add <code>./tests/**/*</code> into the <code>tsconfig</code> <code>include</code> section:</p>
+				<pre><code class="language-json"><span style="color: #000000">  </span><span style="color: #A31515">&quot;include&quot;</span><span style="color: #000000">: [</span>
+<span style="color: #000000">    </span><span style="color: #A31515">&quot;./src/**/*&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">    </span><span style="color: #A31515">&quot;./tests/**/*&#039;</span>
+<span style="color: #A31515">  ]</span>
+</code></pre>
+				<p>This will however make <code>tsc</code> build the <code>tests</code> into the <code>dist</code> output.</p>
+				<p><strong>Therefore this fix should only be done in your own workspace, do not commit or push this change up.</strong></p>
+				<a href="#native-module-toolchain" id="native-module-toolchain" style="color: inherit; text-decoration: none;">
+					<h3>Native Module Toolchain</h3>
+				</a>
+				<p>There are some nuances when packaging with native modules.
+				Included native modules are level witch include leveldown and utp-native.</p>
+				<p>If a module is not set to public then pkg defaults to including it as bytecode.
+				To avoid this breaking with the <code>--no-bytecode</code> flag we need to add <code>--public-packages &quot;*&quot;</code></p>
+				<a href="#leveldown" id="leveldown" style="color: inherit; text-decoration: none;">
+					<h4>leveldown</h4>
+				</a>
+				<p>To get leveldown to work with pkg we need to include the prebuilds with the executable.
+					after building with pkg you need to copy from <code>node_modules/leveldown/prebuilds</code> -&gt; <code>path_to_executable/prebuilds</code>
+				You only need to include the prebuilds for the arch you are targeting. e.g. for linux-x64 you need <code>prebuild/linux-x64</code>.</p>
+				<p>The folder structure for the executable should look like this.</p>
+				<ul>
+					<li>linux_executable_elf</li>
+					<li>prebuilds<ul>
+							<li>linux-x64<ul>
+									<li>(node files)</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<a href="#utp-native" id="utp-native" style="color: inherit; text-decoration: none;">
+					<h4>utp-native</h4>
+				</a>
+				<p>Including utp-native is simpler, you just need to add it as an asset for pkg.
+				Add the following lines to the package.json.</p>
+				<pre><code class="language-json"><span style="color: #A31515">&quot;pkg&quot;</span><span style="color: #000000">: {</span>
+<span style="color: #000000">    </span><span style="color: #0451A5">&quot;assets&quot;</span><span style="color: #000000">: </span><span style="color: #A31515">&quot;node_modules/utp-native/**/*&quot;</span>
+<span style="color: #000000">  }</span>
+</code></pre>
+				<a href="#threadsjs" id="threadsjs" style="color: inherit; text-decoration: none;">
+					<h4>threads.js</h4>
+				</a>
+				<p>To make sure that the worker threads work properly you need to include the compiled worker scripts as an asset.
+				This can be fixed by adding the following to <code>package.json</code></p>
+				<pre><code class="language-json"><span style="color: #A31515">&quot;pkg&quot;</span><span style="color: #000000">: {</span>
+<span style="color: #000000">    </span><span style="color: #0451A5">&quot;assets&quot;</span><span style="color: #000000">: </span><span style="color: #A31515">&quot;dist/bin/worker.js&quot;</span>
+<span style="color: #000000">  }</span>
+</code></pre>
+				<p>If you need to include multiple assets then add them as an array.</p>
+				<pre><code class="language-json"><span style="color: #A31515">&quot;pkg&quot;</span><span style="color: #000000">: {</span>
+<span style="color: #000000">    </span><span style="color: #0451A5">&quot;assets&quot;</span><span style="color: #000000">: [</span>
+<span style="color: #000000">      </span><span style="color: #A31515">&quot;node_modules/utp-native/**/*&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">      </span><span style="color: #A31515">&quot;dist/bin/worker.js&quot;</span>
+<span style="color: #000000">    ]</span>
+<span style="color: #000000">  }</span>
+</code></pre>
+				<a href="#integration-into-nix" id="integration-into-nix" style="color: inherit; text-decoration: none;">
+					<h4>Integration into Nix</h4>
+				</a>
+				<p>Nix build uses node2nix to create the dependencies of the node modules. this does a fairly good job of detecting dependencies but with native modules it may fail to detect CLI tools like <code>node-gyp-build</code>.</p>
+				<p>To ensure the proper dependencies exist while building we need to bring in these utilities during the build:</p>
+				<pre><code><span style="color: #001080">buildInputs</span><span style="color: #000000"> = </span><span style="color: #001080">attrs</span><span style="color: #000000">.</span><span style="color: #001080">buildInputs</span><span style="color: #000000"> ++ [ </span><span style="color: #001080">nodePackages</span><span style="color: #000000">.</span><span style="color: #001080">node</span><span style="color: #000000">-</span><span style="color: #001080">gyp</span><span style="color: #000000">-</span><span style="color: #001080">build</span><span style="color: #000000"> ];</span>
+</code></pre>
+				<p>This has to be done to both <code>node2nixProd</code> and <code>node2nixDev</code>.</p>
 				<a href="#docs-generation" id="docs-generation" style="color: inherit; text-decoration: none;">
 					<h3>Docs Generation</h3>
 				</a>
@@ -142,7 +213,7 @@
 			<nav class="tsd-navigation primary">
 				<ul>
 					<li class=" ">
-						<a href="modules.html">Exports</a>
+						<a href="modules.html">Modules</a>
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="modules/bin_typescript_demo_lib.html">bin/typescript-<wbr>demo-<wbr>lib</a>
@@ -151,7 +222,22 @@
 						<a href="modules/index.html">index</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/lib_library.html">lib/<wbr>Library</a>
+						<a href="modules/lib_Library.html">lib/<wbr>Library</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_NumPair.html">lib/<wbr>Num<wbr>Pair</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_test_level.html">lib/test-<wbr>level</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_test_utp_native.html">lib/test-<wbr>utp-<wbr>native</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_workers_test_workers.html">lib/workers/test-<wbr>workers</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/utils.html">utils</a>
 					</li>
 				</ul>
 			</nav>
