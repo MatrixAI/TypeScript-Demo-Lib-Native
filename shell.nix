@@ -12,8 +12,6 @@ in
     ];
     PKG_CACHE_PATH = utils.pkgCachePath;
     PKG_IGNORE_TAG = 1;
-    # ensure that native modules are built from source
-    npm_config_build_from_source = "true";
     shellHook = ''
       echo 'Entering Typescript-Demo-Lib'
       set -o allexport
