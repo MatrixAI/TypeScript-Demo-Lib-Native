@@ -33,9 +33,9 @@ describe('main', () => {
     expect(tmpMockLog).toContain('[]\n');
     expect(tmpMockLog).toContain('new library\n');
     expect(tmpMockLog).toMatch(uuidRegex);
-    expect(tmpMockLog).toContain('NaN + NaN = NaN\n');
+    expect(tmpMockLog).toContain('0 + 0 = 0\n');
     mockLog.mockRestore();
-  }, 20000);
+  });
   test('adds 0 + 0', async () => {
     const mockLog = mockProcessStdout();
     await main(['', '', '0', '0', dataDir]);

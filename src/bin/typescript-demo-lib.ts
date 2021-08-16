@@ -6,7 +6,7 @@ import NumPair from '../lib/NumPair';
 import { v4 as uuidv4 } from 'uuid';
 import testWorkers from '../lib/workers/test-workers';
 import testLevel from '../lib/test-level';
-import testUptNative from '../lib/test-utp-native';
+import testUtpNative from '../lib/test-utp-native';
 
 async function main(argv = process.argv): Promise<number> {
   // Print out command-line arguments
@@ -22,15 +22,16 @@ async function main(argv = process.argv): Promise<number> {
   process.stdout.write(uuidv4() + '\n');
 
   // Add the first two command-line args and print the result
-  const nums = new NumPair(parseInt(argv[0]), parseInt(argv[1]));
+  // default to using 0
+  const nums = new NumPair(parseInt(argv[0] ?? 0), parseInt(argv[1] ?? 0));
   const sum = nums.num1 + nums.num2;
   process.stdout.write(nums.num1 + ' + ' + nums.num2 + ' = ' + sum + '\n');
 
-  // Testing native modules.
-  const dir = argv[2] ?? '.';
+  // Testing native modules
+  const dir = argv[2] ?? '/tmp';
   await testLevel(dir);
   await testWorkers();
-  await testUptNative();
+  await testUtpNative();
 
   process.exitCode = 0;
   return process.exitCode;
