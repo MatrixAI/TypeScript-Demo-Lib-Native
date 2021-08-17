@@ -16,9 +16,9 @@
   "pkg": {
     "assets": [
       "node_modules/leveldown/**/*",
-      "node_modules/utp-native/**/*",
-      "dist/lib/workers/worker.js"
-    ]
+      "node_modules/utp-native/**/*"
+    ],
+    "scripts": "dist/lib/workers/worker.js"
   },
   "scripts": {
     "build": "tsc -p ./tsconfig.build.json",
