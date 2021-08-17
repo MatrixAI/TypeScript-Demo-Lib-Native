@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import testWorkers from '../lib/workers/test-workers';
 import testLevel from '../lib/test-level';
 import testUtpNative from '../lib/test-utp-native';
+import * as os from 'os';
 
 async function main(argv = process.argv): Promise<number> {
   // Print out command-line arguments
@@ -28,7 +29,7 @@ async function main(argv = process.argv): Promise<number> {
   process.stdout.write(nums.num1 + ' + ' + nums.num2 + ' = ' + sum + '\n');
 
   // Testing native modules
-  const dir = argv[2] ?? '/tmp';
+  const dir = argv[2] ?? os.tmpdir();
   await testLevel(dir);
   await testWorkers();
   await testUtpNative();
