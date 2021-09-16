@@ -20,7 +20,7 @@ describe('main', () => {
     });
   });
   test('main takes synthetic parameters', async () => {
-    // jest can also "spy on" the console object
+    // Jest can also "spy on" the console object
     // and then you can test on stdout
     const mockLog = mockProcessStdout();
     expect(await main(['', '', '1', '2', dataDir])).toEqual(0);

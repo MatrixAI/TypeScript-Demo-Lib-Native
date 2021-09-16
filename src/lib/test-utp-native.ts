@@ -1,8 +1,8 @@
 import utp from 'utp-native';
 import { sleep } from '../utils';
 
-async function testUptNative() {
-  // upt-native tests
+async function testUtpNative() {
+  // Utp-native tests
   process.stdout.write('Lets test utp-native.\n');
   const server = utp.createServer((socket) => {
     socket.pipe(socket);
@@ -25,4 +25,4 @@ async function testUptNative() {
   await sleep(2000);
 }
 
-export default testUptNative;
+export default testUtpNative;
