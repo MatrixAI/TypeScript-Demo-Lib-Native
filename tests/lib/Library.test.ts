@@ -12,9 +12,8 @@ declare global {
 describe('Library class', () => {
   let library: Library | null;
 
-  beforeAll(async (done) => {
+  beforeAll(() => {
     library = new Library('some param');
-    done();
   });
 
   afterAll(() => {
