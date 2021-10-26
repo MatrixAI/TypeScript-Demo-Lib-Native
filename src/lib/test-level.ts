@@ -1,6 +1,6 @@
-import level from 'level';
-import process from 'process';
 import path from 'path';
+import process from 'process';
+import level from 'level';
 
 // Level tests.
 async function testLevel(dir: string) {

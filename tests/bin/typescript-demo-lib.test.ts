@@ -1,8 +1,8 @@
+import fs from 'fs';
+import os from 'os';
+import path from 'path';
 import { mockProcessStdout } from 'jest-mock-process';
 import main from '@/bin/typescript-demo-lib';
-import fs from 'fs';
-import path from 'path';
-import os from 'os';
 
 const uuidRegex = new RegExp(
   '[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}',

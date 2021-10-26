@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 
+import * as os from 'os';
 import process from 'process';
+import { v4 as uuidv4 } from 'uuid';
 import Library from '../lib/Library';
 import NumPair from '../lib/NumPair';
-import { v4 as uuidv4 } from 'uuid';
-import testWorkers from '../lib/workers/test-workers';
 import testLevel from '../lib/test-level';
 import testUtpNative from '../lib/test-utp-native';
-import * as os from 'os';
+import testWorkers from '../lib/workers/test-workers';
 
 async function main(argv = process.argv): Promise<number> {
   // Print out command-line arguments

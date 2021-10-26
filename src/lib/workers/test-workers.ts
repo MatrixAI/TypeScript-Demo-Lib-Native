@@ -1,7 +1,6 @@
-//Testing worker threads.
-import { Pool, spawn, Worker } from 'threads';
-import process from 'process';
 import * as os from 'os';
+import process from 'process';
+import { Pool, spawn, Worker } from 'threads';
 
 async function testWorkers() {
   process.stdout.write('Lets test workers.\n');

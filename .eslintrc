@@ -14,6 +14,9 @@
     "prettier",
     "prettier/@typescript-eslint"
   ],
+  "plugins": [
+    "import"
+  ],
   "parserOptions": {
     "sourceType": "module",
     "ecmaVersion": 2020
@@ -34,6 +37,27 @@
       {
         "ignoreInlineComments": true,
         "ignoreConsecutiveComments": true
+      }
+    ],
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "type",
+          "builtin",
+          "external",
+          "internal",
+          "index",
+          "sibling",
+          "parent",
+          "object"
+        ],
+        "pathGroups": [
+          {
+            "pattern": "@/**",
+            "group": "internal"
+          }
+        ]
       }
     ],
     "@typescript-eslint/no-namespace": 0,
