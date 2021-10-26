@@ -54,6 +54,10 @@
         ],
         "pathGroups": [
           {
+            "pattern": "@",
+            "group": "internal"
+          },
+          {
             "pattern": "@/**",
             "group": "internal"
           }
