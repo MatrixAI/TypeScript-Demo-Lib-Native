@@ -21,7 +21,7 @@
     "scripts": "dist/lib/workers/worker.js"
   },
   "scripts": {
-    "build": "tsc -p ./tsconfig.build.json",
+    "build": "rm -r ./dist || true; tsc -p ./tsconfig.build.json",
     "ts-node": "ts-node -r tsconfig-paths/register",
     "test": "jest",
     "lint": "eslint '{src,tests}/**/*.{js,ts}'",
