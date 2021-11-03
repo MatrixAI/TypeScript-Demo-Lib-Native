@@ -26,8 +26,8 @@
     "test": "jest",
     "lint": "eslint '{src,tests}/**/*.{js,ts}'",
     "lintfix": "eslint '{src,tests}/**/*.{js,ts}' --fix",
-    "docs": "typedoc --tsconfig ./tsconfig.build.json --out ./docs src && touch ./docs/.nojekyll",
-    "typescript-demo-lib": "ts-node -r tsconfig-paths/register src/bin/typescript-demo-lib.ts"
+    "docs": "rm -r ./docs || true; typedoc --gitRevision master --tsconfig ./tsconfig.build.json --out ./docs src && touch ./docs/.nojekyll",
+    "typescript-demo-lib": "ts-node -r tsconfig-paths/register --transpile-only src/bin/typescript-demo-lib.ts"
   },
   "dependencies": {
     "level": "^7.0.0",
