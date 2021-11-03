@@ -1,4 +1,4 @@
-import { test } from './utils.json';
+import { test } from './test.json';
 // @ts-ignore package.json is outside rootDir
 import { version } from '../package.json';
 
