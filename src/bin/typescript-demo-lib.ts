@@ -8,7 +8,7 @@ import NumPair from '../lib/NumPair';
 import testLevel from '../lib/test-level';
 import testUtpNative from '../lib/test-utp-native';
 import testWorkers from '../lib/workers/test-workers';
-import { version } from '../utils';
+import { version, test } from '../utils';
 
 async function main(argv = process.argv): Promise<number> {
   // Print out command-line arguments
@@ -36,6 +36,7 @@ async function main(argv = process.argv): Promise<number> {
   await testUtpNative();
 
   process.stdout.write(version);
+  process.stdout.write(test.toString());
 
   process.exitCode = 0;
   return process.exitCode;

@@ -18,7 +18,9 @@
       "node_modules/leveldown/**/*",
       "node_modules/utp-native/**/*"
     ],
-    "scripts": "dist/lib/workers/worker.js"
+    "scripts": [
+      "dist/lib/workers/worker.js"
+    ]
   },
   "scripts": {
     "build": "rm -r ./dist || true; tsc -p ./tsconfig.build.json",
