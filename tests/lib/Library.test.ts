@@ -1,4 +1,5 @@
 import Library from '@/lib/Library';
+import { testUtility } from './utils';
 
 declare global {
   namespace NodeJS {
@@ -14,6 +15,9 @@ describe('Library class', () => {
 
   beforeAll(() => {
     library = new Library('some param');
+    // A noop test utility
+    // demonstrates using utils inside tests
+    testUtility();
   });
 
   afterAll(() => {
