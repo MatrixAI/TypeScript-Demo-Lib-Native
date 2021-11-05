@@ -81,24 +81,6 @@ Due to https://github.com/microsoft/TypeScript/issues/10866, you cannot use path
 
 However, we have left the path alias configuration in `tsconfig.json`, `jest.config.js` and in the tests we are making use of the `@` alias.
 
-#### VSCode Path Aliases
-
-VSCode cannot follow path aliases in our tests due to
-https://github.com/microsoft/vscode/issues/94474.
-
-To resolve this, add `./tests/**/*` into the `tsconfig` `include` section:
-
-```json
-  "include": [
-    "./src/**/*",
-    "./tests/**/*'
-  ]
-```
-
-This will however make `tsc` build the `tests` into the `dist` output.
-
-**Therefore this fix should only be done in your own workspace, do not commit or push this change up.**
-
 ### Native Module Toolchain
 
 There are some nuances when packaging with native modules.
