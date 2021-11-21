@@ -85,6 +85,8 @@ application run:
           tail -1 \
         )"
     - $build_application/bin/typescript-demo-lib
+  only:
+    - master
 
 docker run:
   stage: quality
@@ -100,6 +102,8 @@ docker run:
   script:
     - image="$(docker load --input ./builds/*docker* | cut -d' ' -f3)"
     - docker run "$image"
+  only:
+    - master
 
 linux run:
   stage: quality
@@ -108,6 +112,8 @@ linux run:
     - nix
   script:
     - for f in ./builds/*-linux-*; do "$f"; done
+  only:
+    - master
 
 windows run:
   stage: quality
@@ -117,6 +123,8 @@ windows run:
     - Get-ChildItem -File ./builds/*-win32-* | ForEach {& $_.FullName}
   tags:
     - windows
+  only:
+    - master
 
 # macos is disabled until this repo has access
 # macos run:
@@ -126,6 +134,8 @@ windows run:
 #     - nix
 #   script:
 #     - for f in ./builds/*-macos-*; do "$f"; done
+#   only:
+#     - master
 #   tags:
 #     - shared-macos-amd64
 
@@ -139,7 +149,11 @@ packages:
         nix-shell -I nixpkgs=./pkgs.nix --packages git gitAndTools.gh --run '
         commit="$(git rev-parse --short HEAD)";
         gh release \
-          create "$commit" builds/*-linux-* builds/*-win32-* builds/*-macos-* \
+          create "$commit" \
+          builds/*.closure.gz \
+          builds/*-linux-* \
+          builds/*-win32-* \o
+          builds/*-macos-* \
           --title "Build-$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
           --prerelease \
           --notes "" \
@@ -147,4 +161,3 @@ packages:
         '
   only:
     - master
-
