@@ -152,7 +152,7 @@ packages:
           create "$commit" \
           builds/*.closure.gz \
           builds/*-linux-* \
-          builds/*-win32-* \o
+          builds/*-win32-* \
           builds/*-macos-* \
           --title "Build-$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
           --prerelease \
