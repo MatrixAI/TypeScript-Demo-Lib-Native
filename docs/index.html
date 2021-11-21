@@ -77,7 +77,9 @@
 				<pre><code class="language-sh"><span style="color: #000000">nix-env -f ./release.nix --install --attr application</span>
 </code></pre>
 				<p>Install into Docker:</p>
-				<pre><code class="language-sh"><span style="color: #000000">docker load --input </span><span style="color: #A31515">&quot;$(nix-build ./release.nix --attr docker)&quot;</span>
+				<pre><code class="language-sh"><span style="color: #000000">loaded=</span><span style="color: #A31515">&quot;$(docker load --input &quot;$(nix-build ./release.nix --attr docker)&quot;)&quot;</span>
+<span style="color: #000000">image=</span><span style="color: #A31515">&quot;$(cut -d&#039; &#039; -f3 </span><span style="color: #000000">&lt;&lt;&lt;</span><span style="color: #A31515"> &quot;$loaded&quot;)&quot;</span>
+<span style="color: #000000">docker run -it </span><span style="color: #A31515">&quot;</span><span style="color: #001080">$image</span><span style="color: #A31515">&quot;</span>
 </code></pre>
 				<a href="#development" id="development" style="color: inherit; text-decoration: none;">
 					<h2>Development</h2>
@@ -120,19 +122,6 @@
 				</a>
 				<p>Due to <a href="https://github.com/microsoft/TypeScript/issues/10866">https://github.com/microsoft/TypeScript/issues/10866</a>, you cannot use path aliases without a bundler like Webpack to further transform the generated JavaScript code in order to resolve the path aliases. Because this is a simple library demonstration, there&#39;s no need to use a bundler. In fact, for such libraries, it is far more efficient to not bundle the code.</p>
 				<p>However, we have left the path alias configuration in <code>tsconfig.json</code>, <code>jest.config.js</code> and in the tests we are making use of the <code>@</code> alias.</p>
-				<a href="#vscode-path-aliases" id="vscode-path-aliases" style="color: inherit; text-decoration: none;">
-					<h4>VSCode Path Aliases</h4>
-				</a>
-				<p>VSCode cannot follow path aliases in our tests due to
-				<a href="https://github.com/microsoft/vscode/issues/94474">https://github.com/microsoft/vscode/issues/94474</a>.</p>
-				<p>To resolve this, add <code>./tests/**/*</code> into the <code>tsconfig</code> <code>include</code> section:</p>
-				<pre><code class="language-json"><span style="color: #000000">  </span><span style="color: #A31515">&quot;include&quot;</span><span style="color: #000000">: [</span>
-<span style="color: #000000">    </span><span style="color: #A31515">&quot;./src/**/*&quot;</span><span style="color: #000000">,</span>
-<span style="color: #000000">    </span><span style="color: #A31515">&quot;./tests/**/*&#039;</span>
-<span style="color: #A31515">  ]</span>
-</code></pre>
-				<p>This will however make <code>tsc</code> build the <code>tests</code> into the <code>dist</code> output.</p>
-				<p><strong>Therefore this fix should only be done in your own workspace, do not commit or push this change up.</strong></p>
 				<a href="#native-module-toolchain" id="native-module-toolchain" style="color: inherit; text-decoration: none;">
 					<h3>Native Module Toolchain</h3>
 				</a>
@@ -226,6 +215,9 @@
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="modules/lib_NumPair.html">lib/<wbr>Num<wbr>Pair</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_test_fd_lock.html">lib/test-<wbr>fd-<wbr>lock</a>
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="modules/lib_test_level.html">lib/test-<wbr>level</a>
