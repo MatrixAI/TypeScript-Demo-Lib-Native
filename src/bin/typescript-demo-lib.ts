@@ -8,6 +8,7 @@ import NumPair from '../lib/NumPair';
 import testLevel from '../lib/test-level';
 import testUtpNative from '../lib/test-utp-native';
 import testWorkers from '../lib/workers/test-workers';
+import { testFdLock } from '../lib/test-fd-lock';
 import { version, test } from '../utils';
 
 async function main(argv = process.argv): Promise<number> {
@@ -35,8 +36,11 @@ async function main(argv = process.argv): Promise<number> {
   await testWorkers();
   await testUtpNative();
 
-  process.stdout.write(version);
-  process.stdout.write(test.toString());
+  process.stdout.write(version + '\n');
+  process.stdout.write(test.toString() + '\n');
+
+  // Testing fd-lock
+  await testFdLock(dir);
 
   process.exitCode = 0;
   return process.exitCode;
