@@ -28,7 +28,9 @@ nix-env -f ./release.nix --install --attr application
 Install into Docker:
 
 ```sh
-docker load --input "$(nix-build ./release.nix --attr docker)"
+loaded="$(docker load --input "$(nix-build ./release.nix --attr docker)")"
+image="$(cut -d' ' -f3 <<< "$loaded")"
+docker run -it "$image"
 ```
 
 ## Development
