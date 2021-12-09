@@ -33,11 +33,12 @@
     "typescript-demo-lib": "ts-node -r tsconfig-paths/register --transpile-only src/bin/typescript-demo-lib.ts"
   },
   "dependencies": {
+    "fd-lock": "^1.2.0",
     "level": "^7.0.0",
     "threads": "^1.6.5",
+    "typescript-cached-transpile": "0.0.6",
     "utp-native": "^2.5.3",
-    "uuid": "^8.3.0",
-    "fd-lock": "^1.2.0"
+    "uuid": "^8.3.0"
   },
   "devDependencies": {
     "@types/jest": "^27.0.2",
