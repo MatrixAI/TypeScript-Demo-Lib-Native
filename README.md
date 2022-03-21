@@ -83,6 +83,27 @@ Due to https://github.com/microsoft/TypeScript/issues/10866, you cannot use path
 
 However, we have left the path alias configuration in `tsconfig.json`, `jest.config.js` and in the tests we are making use of the `@` alias.
 
+### Local Package Linking
+
+When developing on multiple NPM packages, it can be easier to use `npm link` so that changes are immediately reflected rather than repeatedly publishing packages. To do this, you need to use `npm link`. After linking a local directory, you need to provide `tsconfig.json` paths so TypeScript compiler can find the right files.
+
+For example when linking `@matrixai/db` located in `../js-db`:
+
+```sh
+npm link ../js-db
+```
+
+You would need to add these paths to `tsconfig.json`:
+
+```
+  "paths": {
+    "@": ["index"],
+    "@/*": ["*"],
+    "@matrixai/db": ["../node_modules/@matrixai/db/src"],
+    "@matrixai/db/*": ["../node_modules/@matrixai/db/src/*"]
+  },
+```
+
 ### Native Module Toolchain
 
 There are some nuances when packaging with native modules.
