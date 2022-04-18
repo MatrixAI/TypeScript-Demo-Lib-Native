@@ -6,6 +6,7 @@
 , pkgs
 , lib
 , fetchurl
+, fetchFromGitHub
 }:
 
 rec {
@@ -13,9 +14,17 @@ rec {
   basename = builtins.baseNameOf node2nixDev.packageName;
   src = nix-gitignore.gitignoreSource [".git"] ./.;
   nodeVersion = builtins.elemAt (lib.versions.splitVersion nodejs.version) 0;
+  # custom node2nix directly from GitHub
+  node2nixSrc = fetchFromGitHub {
+    owner = "svanderburg";
+    repo = "node2nix";
+    rev = "68f5735f9a56737e3fedceb182705985e3ab8799";
+    sha256 = "1f791vikig65ly5vcw6zjd0nv2qb8l5w5lr3xy343iq6746s1bil";
+  };
+  node2nix = (import "${node2nixSrc}/release.nix" {}).package.x86_64-linux;
   node2nixDrv = dev: runCommandNoCC "node2nix" {} ''
     mkdir $out
-    ${nodePackages.node2nix}/bin/node2nix \
+    ${node2nix}/bin/node2nix \
       ${lib.optionalString dev "--development"} \
       --input ${src}/package.json \
       --lock ${src}/package-lock.json \
@@ -36,35 +45,30 @@ rec {
     buildInputs = attrs.buildInputs ++ [ nodePackages.node-gyp-build ];
     dontNpmInstall = true;
     postInstall = ''
-      # The dependencies were prepared in the install phase
-      # See `node2nix` generated `node-env.nix` for details.
+      # The dependencies were prepared in the installphase
+      # See `node2nix` generated `node-env.nix` for details
       npm run build
-
-      # This call does not actually install packages. The dependencies
-      # are present in `node_modules` already. It creates symlinks in
-      # $out/lib/node_modules/.bin according to `bin` section in `package.json`.
-      npm install
     '';
   });
   pkgBuilds = {
-    "3.1" = {
+    "3.3" = {
       "linux-x64" = fetchurl {
-        url = "https://github.com/vercel/pkg-fetch/releases/download/v3.1/node-v14.17.0-linux-x64";
-        sha256 = "11vk7vfxa1327mr71gys8fhglrpscjaxrpnbk1jbnj5llyzcx52l";
+        url = "https://github.com/vercel/pkg-fetch/releases/download/v3.3/node-v16.14.2-linux-x64";
+        sha256 = "8fe5316565d6fc759aed4eae650064273567bcfb30d841b75b18ffb396a4babc";
       };
       "win32-x64" = fetchurl {
-        url = "https://github.com/vercel/pkg-fetch/releases/download/v3.1/node-v14.17.0-win-x64";
-        sha256 = "08wf9ldy33sac1vmhd575zf2fhrbci3wz88a9nwdbccsxrkbgklc";
+        url = "https://github.com/vercel/pkg-fetch/releases/download/v3.3/node-v16.14.2-win-x64";
+        sha256 = "f569a056424242da69e41987b418c3e2eff84a5e2b36601f4ea4babc1dca2eb0";
       };
       "macos-x64" = fetchurl {
-        url = "https://github.com/vercel/pkg-fetch/releases/download/v3.1/node-v14.17.0-macos-x64";
-        sha256 = "0lwa6s66wy7qmj4wbpa65hv996vxzznrscqgwrk3q2zzpsra24q7";
+        url = "https://github.com/vercel/pkg-fetch/releases/download/v3.3/node-v16.14.2-macos-x64";
+        sha256 = "5bb0e5fd25bdda12ef510df0a27d468c756535a8341c9f44764bb0bf01d907c3";
       };
     };
   };
   pkgCachePath =
     let
-      pkgBuild = pkgBuilds."3.1";
+      pkgBuild = pkgBuilds."3.3";
       fetchedName = n: builtins.replaceStrings ["node"] ["fetched"] n;
     in
       linkFarm "pkg-cache"
@@ -82,7 +86,7 @@ rec {
             path = pkgBuild.macos-x64;
           }
         ];
-  pkg = pkgs.nodePackages.pkg.override {
+  pkg = nodePackages.pkg.override {
     postFixup = ''
       patch -p0 < ${./nix/leveldown.patch}
     '';

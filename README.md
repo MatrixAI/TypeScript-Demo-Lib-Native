@@ -9,7 +9,7 @@ Note that JavaScript libraries are not packaged in Nix. Only JavaScript applicat
 Building the package:
 
 ```sh
-nix-build -E '(import ./pkgs.nix).callPackage ./default.nix {}'
+nix-build -E '(import ./pkgs.nix {}).callPackage ./default.nix {}'
 ```
 
 Building the releases:

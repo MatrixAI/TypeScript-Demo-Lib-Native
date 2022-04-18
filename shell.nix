@@ -7,7 +7,7 @@ in
   pkgs.mkShell {
     nativeBuildInputs = [
       nodejs
-      nodePackages.node2nix
+      utils.node2nix
       utils.pkg
     ];
     PKG_CACHE_PATH = utils.pkgCachePath;
