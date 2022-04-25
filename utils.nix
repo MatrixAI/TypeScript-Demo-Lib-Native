@@ -54,15 +54,15 @@ rec {
     "3.3" = {
       "linux-x64" = fetchurl {
         url = "https://github.com/vercel/pkg-fetch/releases/download/v3.3/node-v16.14.2-linux-x64";
-        sha256 = "8fe5316565d6fc759aed4eae650064273567bcfb30d841b75b18ffb396a4babc";
+        sha256 = "1g5sljbb7zqqbfvl3n1hzfy6fd97ch06bbjfxnd7bz6ncmjk3rcg";
       };
       "win32-x64" = fetchurl {
         url = "https://github.com/vercel/pkg-fetch/releases/download/v3.3/node-v16.14.2-win-x64";
-        sha256 = "f569a056424242da69e41987b418c3e2eff84a5e2b36601f4ea4babc1dca2eb0";
+        sha256 = "1c1fr8fvrfm49qgn0dibbr5givz2qccb91qrwilxlhj289ba0sgm";
       };
       "macos-x64" = fetchurl {
         url = "https://github.com/vercel/pkg-fetch/releases/download/v3.3/node-v16.14.2-macos-x64";
-        sha256 = "5bb0e5fd25bdda12ef510df0a27d468c756535a8341c9f44764bb0bf01d907c3";
+        sha256 = "1hq7v40vzc2bfr29y71lm0snaxcc8rys5w0da7pi5nmx4pyybc2v";
       };
     };
   };
