@@ -15,7 +15,7 @@ describe('main', () => {
     dataDir = await fs.promises.mkdtemp(path.join(os.tmpdir(), 'test-'));
   });
   afterEach(async () => {
-    await fs.promises.rmdir(dataDir, {
+    await fs.promises.rm(dataDir, {
       recursive: true,
     });
   });

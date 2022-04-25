@@ -126,18 +126,17 @@ windows run:
   only:
     - master
 
-# macos is disabled until this repo has access
-# macos run:
-#   stage: quality
-#   image: macos-11-xcode-12
-#   dependencies:
-#     - nix
-#   script:
-#     - for f in ./builds/*-macos-*; do "$f"; done
-#   only:
-#     - master
-#   tags:
-#     - shared-macos-amd64
+macos run:
+  stage: quality
+  image: macos-11-xcode-12
+  dependencies:
+    - nix
+  script:
+    - for f in ./builds/*-macos-*; do "$f"; done
+  only:
+    - master
+  tags:
+    - shared-macos-amd64
 
 packages:
   stage: release
