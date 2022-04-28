@@ -7,7 +7,7 @@ async function testWorkers() {
   const coreCount = os.cpus().length;
   const pool = Pool(() => spawn(new Worker('./worker')), coreCount);
   for (let i = 0; i < coreCount; i++) {
-    pool.queue(async (hellower) => {
+    void pool.queue(async (hellower) => {
       process.stdout.write((await hellower.helloWorld()) + '\n');
     });
   }

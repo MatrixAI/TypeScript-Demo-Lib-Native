@@ -18,6 +18,7 @@
     "import"
   ],
   "parserOptions": {
+    "project": "tsconfig.json",
     "sourceType": "module",
     "ecmaVersion": 2021
   },
@@ -31,6 +32,18 @@
     "no-useless-escape": 0,
     "no-console": "error",
     "eqeqeq": ["error", "smart"],
+    "spaced-comment": [
+      "warn",
+      "always",
+      {
+        "line": {
+          "exceptions": ["-"]
+        },
+        "block": {
+          "exceptions": ["*"]
+        }
+      }
+    ],
     "capitalized-comments": [
       "warn",
       "always",
@@ -79,7 +92,22 @@
     ],
     "@typescript-eslint/no-inferrable-types": 0,
     "@typescript-eslint/no-non-null-assertion": 0,
+    "@typescript-eslint/no-this-alias": 0,
     "@typescript-eslint/no-var-requires": 0,
+    "@typescript-eslint/no-empty-function": 0,
+    "@typescript-eslint/no-empty-interface": 0,
+    "@typescript-eslint/consistent-type-imports": ["error"],
+    "@typescript-eslint/consistent-type-exports": ["error"],
+    "no-throw-literal": "off",
+    "@typescript-eslint/no-throw-literal": ["error"],
+    "@typescript-eslint/no-floating-promises": ["error", {
+      "ignoreVoid": true,
+      "ignoreIIFE": true
+    }],
+    "@typescript-eslint/no-misused-promises": ["error", {
+      "checksVoidReturn": false
+    }],
+    "@typescript-eslint/await-thenable": ["error"],
     "@typescript-eslint/naming-convention": [
       "error",
       {
@@ -90,13 +118,14 @@
       },
       {
         "selector": "variable",
-        "format": ["camelCase", "UPPER_CASE"],
+        "format": ["camelCase", "UPPER_CASE", "PascalCase"],
         "leadingUnderscore": "allow",
         "trailingUnderscore": "allowSingleOrDouble"
       },
       {
         "selector": "parameter",
         "format": ["camelCase"],
+        "leadingUnderscore": "allow",
         "trailingUnderscore": "allowSingleOrDouble"
       },
       {
