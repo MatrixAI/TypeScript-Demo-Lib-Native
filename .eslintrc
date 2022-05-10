@@ -11,8 +11,7 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended",
-    "prettier",
-    "prettier/@typescript-eslint"
+    "prettier"
   ],
   "plugins": [
     "import"
@@ -24,7 +23,6 @@
   "rules": {
     "linebreak-style": ["error", "unix"],
     "no-empty": 1,
-    "no-undef": 1,
     "no-useless-catch": 1,
     "no-prototype-builtins": 1,
     "no-constant-condition": 0,
