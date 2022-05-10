@@ -76,7 +76,7 @@ describe('main', () => {
     expect(tmpMockLog).toContain('7657 + 238947 = 246604\n');
     mockLog.mockRestore();
   });
-  test('level should work.', async () => {
+  test('level should work', async () => {
     const mockLog = mockProcessStdout();
     await main(['', '', '', '', dataDir]);
     const tmpMockLog = mockLog.mock.calls.join('');
@@ -84,7 +84,7 @@ describe('main', () => {
     expect(tmpMockLog).toContain('hello Level!');
     mockLog.mockRestore();
   });
-  test('Worker threads should work.', async () => {
+  test('worker threads should work', async () => {
     const mockLog = mockProcessStdout();
     await main(['', '', '', '', dataDir]);
     const tmpMockLog = mockLog.mock.calls.join('');
@@ -92,7 +92,7 @@ describe('main', () => {
     expect(tmpMockLog).toContain('Hello Worker!');
     mockLog.mockRestore();
   });
-  test('utp-native should work.', async () => {
+  test('utp-native should work', async () => {
     const mockLog = mockProcessStdout();
     await main(['', '', '', '', dataDir]);
     const tmpMockLog = mockLog.mock.calls.join('');

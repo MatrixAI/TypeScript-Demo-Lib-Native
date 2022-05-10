@@ -1,15 +1,6 @@
 import Library from '@/lib/Library';
 import { testUtility } from './utils';
 
-declare global {
-  namespace NodeJS {
-    interface Global {
-      projectDir: string;
-      testDir: string;
-    }
-  }
-}
-
 describe('Library class', () => {
   let library: Library | null;
 
