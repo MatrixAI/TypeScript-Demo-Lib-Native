@@ -12,5 +12,6 @@
 /tmp
 /docs
 /benches
+/build
 /builds
 /dist/tsbuildinfo

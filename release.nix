@@ -8,21 +8,23 @@ let
       name = "${utils.basename}-${version}-linux-${arch}";
       version = utils.node2nixDev.version;
       src = "${utils.node2nixDev}/lib/node_modules/${utils.node2nixDev.packageName}";
-      buildInputs = [
-        utils.pkg
-      ];
+      nativeBuildInputs = [ nodejs ];
       PKG_CACHE_PATH = utils.pkgCachePath;
       PKG_IGNORE_TAG = 1;
-      # ensure that native modules are built from source
-      npm_config_build_from_source = "true";
       buildPhase = ''
-        cp ${./package.json} package.json
-        pkg . \
-          --targets node${utils.nodeVersion}-linux-${arch} \
-          --no-bytecode \
-          --public \
-          --public-packages "*" \
-          --output out
+        # Copy without overwriting existing prebuilt native addons
+        cp \
+          --recursive \
+          --no-clobber \
+          --no-target-directory \
+          ${./prebuilds} \
+          ./prebuilds/
+        npm run pkg -- \
+          --output=out \
+          --executable=typescript-demo-lib \
+          --node-version=${utils.nodeVersion} \
+          --platform=linux \
+          --arch=${arch}
       '';
       installPhase = ''
         cp out $out
@@ -31,24 +33,26 @@ let
     };
   buildExe = arch:
     stdenv.mkDerivation rec {
-      name = "${utils.basename}-${version}-win32-${arch}.exe";
+      name = "${utils.basename}-${version}-win-${arch}.exe";
       version = utils.node2nixDev.version;
       src = "${utils.node2nixDev}/lib/node_modules/${utils.node2nixDev.packageName}";
-      buildInputs = [
-        utils.pkg
-      ];
+      nativeBuildInputs = [ nodejs ];
       PKG_CACHE_PATH = utils.pkgCachePath;
       PKG_IGNORE_TAG = 1;
-      # ensure that native modules are built from source
-      npm_config_build_from_source = "true";
       buildPhase = ''
-        cp ${./package.json} package.json
-        pkg . \
-          --targets node${utils.nodeVersion}-win-${arch} \
-          --no-bytecode \
-          --public \
-          --public-packages "*" \
-          --output out.exe
+        # Copy without overwriting existing prebuilt native addons
+        cp \
+          --recursive \
+          --no-clobber \
+          --no-target-directory \
+          ${./prebuilds} \
+          ./prebuilds/
+        npm run pkg -- \
+          --output=out.exe \
+          --executable=typescript-demo-lib \
+          --node-version=${utils.nodeVersion} \
+          --platform=win32 \
+          --arch=${arch}
       '';
       installPhase = ''
         cp out.exe $out
@@ -60,21 +64,24 @@ let
       name = "${utils.basename}-${version}-macos-${arch}";
       version = utils.node2nixDev.version;
       src = "${utils.node2nixDev}/lib/node_modules/${utils.node2nixDev.packageName}";
-      buildInputs = [
-        utils.pkg
-      ];
+      nativeBuildInputs = [ nodejs ];
       PKG_CACHE_PATH = utils.pkgCachePath;
       PKG_IGNORE_TAG = 1;
-      # ensure that native modules are built from source
-      npm_config_build_from_source = "true";
       buildPhase = ''
-        cp ${./package.json} package.json
-        pkg . \
-          --targets node${utils.nodeVersion}-macos-${arch} \
-          --no-bytecode \
-          --public \
-          --public-packages "*" \
-          --output out
+        # Copy without overwriting existing prebuilt native addons
+        # native addons may have been built outside of nix
+        cp \
+          --recursive \
+          --no-clobber \
+          --no-target-directory \
+          ${./prebuilds} \
+          ./prebuilds/
+        npm run pkg -- \
+          --output=out \
+          --executable=typescript-demo-lib \
+          --node-version=${utils.nodeVersion} \
+          --platform=darwin \
+          --arch=${arch}
       '';
       installPhase = ''
         cp out $out
@@ -109,6 +116,9 @@ in
       macos = {
         x64 = {
           macho = buildMacho "x64";
+        };
+        arm64 = {
+          macho = buildMacho "arm64";
         };
       };
     };
