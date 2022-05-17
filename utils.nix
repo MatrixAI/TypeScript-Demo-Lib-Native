@@ -11,7 +11,7 @@
 rec {
   # this removes the org scoping
   basename = builtins.baseNameOf node2nixDev.packageName;
-  src = nix-gitignore.gitignoreSource [".git"] ./.;
+  src = nix-gitignore.gitignoreSource [".git" "/*.nix"] ./.;
   nodeVersion = builtins.elemAt (lib.versions.splitVersion nodejs.version) 0;
   # custom node2nix directly from GitHub
   node2nixSrc = fetchFromGitHub {
