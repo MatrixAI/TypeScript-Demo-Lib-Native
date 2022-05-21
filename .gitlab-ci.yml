@@ -192,6 +192,7 @@ build:prerelease:
   variables:
     npm_config_auth: "$NPM_TOKEN"
   script:
+    - echo $npm_config_auth
     - >
         nix-shell --run '
         npm publish --tag staging --access public;
