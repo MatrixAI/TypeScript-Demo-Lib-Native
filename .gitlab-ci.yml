@@ -32,10 +32,10 @@ cache:
     - ./tmp/jest/
 
 stages:
-  - check        # Linting, unit tests
-  - build        # Cross-platform library compilation, unit tests
-  - integration  # Cross-platform application bundling, integration tests, and pre-release
-  - release      # Cross-platform distribution and deployment
+  - check       # Linting, unit tests
+  - build       # Cross-platform library compilation, unit tests
+  - integration # Cross-platform application bundling, integration tests, and pre-release
+  - release     # Cross-platform distribution and deployment
 
 image: registry.gitlab.com/matrixai/engineering/maintenance/gitlab-runner
 
@@ -48,11 +48,13 @@ check:lint:
         npm run lint;
         '
   rules:
-    - if: $CI_COMMIT_TAG
+    # Runs on feature and staging commits and ignores version commits
+    - if: $CI_COMMIT_BRANCH =~ /^(?:feature.*|staging)$/ && $CI_COMMIT_TITLE !~ /^[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
+    # Runs on tag pipeline where the tag is a prerelease or release version
+    - if: $CI_COMMIT_TAG =~ /^v[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
+    # Manually run on commits other than master and ignore version commits
+    - if: $CI_COMMIT_BRANCH && $CI_COMMIT_BRANCH != 'master' && $CI_COMMIT_TITLE !~ /^[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
       when: manual
-    - if: $CI_COMMIT_BRANCH == 'master'
-      when: manual
-    - when: always
 
 check:nix-dry:
   stage: check
@@ -60,11 +62,13 @@ check:nix-dry:
   script:
     - nix-build -v -v --dry-run ./release.nix
   rules:
-    - if: $CI_COMMIT_TAG
+    # Runs on feature and staging commits and ignores version commits
+    - if: $CI_COMMIT_BRANCH =~ /^(?:feature.*|staging)$/ && $CI_COMMIT_TITLE !~ /^[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
+    # Runs on tag pipeline where the tag is a prerelease or release version
+    - if: $CI_COMMIT_TAG =~ /^v[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
+    # Manually run on commits other than master and ignore version commits
+    - if: $CI_COMMIT_BRANCH && $CI_COMMIT_BRANCH != 'master' && $CI_COMMIT_TITLE !~ /^[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
       when: manual
-    - if: $CI_COMMIT_BRANCH == 'master'
-      when: manual
-    - when: always
 
 check:test:
   stage: check
@@ -81,19 +85,17 @@ check:test:
       junit:
         - ./tmp/junit.xml
   rules:
-    - if: $CI_COMMIT_TAG
+    # Runs on staging commits and ignores version commits
+    - if: $CI_COMMIT_BRANCH =~ /^feature.*$/ && $CI_COMMIT_TITLE !~ /^[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
+    # Manually run on commits other than master and staging and ignore version commits
+    - if: $CI_COMMIT_BRANCH && $CI_COMMIT_BRANCH !~ /^(?:master|staging)$/ && $CI_COMMIT_TITLE !~ /^[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
       when: manual
-    - if: $CI_COMMIT_BRANCH == 'master'
-      when: manual
-    # This job will be overridden by `build:linux`
-    - if: $CI_COMMIT_BRANCH == 'staging'
-      when: never
-    - when: always
 
 build:linux:
   stage: build
   needs:
-    - check:lint
+    - job: check:lint
+      optional: true
   script:
     - >
         nix-shell --run '
@@ -107,17 +109,19 @@ build:linux:
         - ./tmp/junit.xml
     paths:
       - ./prebuilds/
+      # Only the build:linux preserves the dist
+      - ./dist
   rules:
-    - if: $CI_COMMIT_TAG
-      when: manual
-    - if: $CI_COMMIT_BRANCH == 'master'
-      when: manual
-    - if: $CI_COMMIT_BRANCH == 'staging'
+    # Runs on staging commits and ignores version commits
+    - if: $CI_COMMIT_BRANCH == 'staging' && $CI_COMMIT_TITLE !~ /^[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
+    # Runs on tag pipeline where the tag is a prerelease or release version
+    - if: $CI_COMMIT_TAG =~ /^v[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
 
 build:windows:
   stage: build
   needs:
-    - check:lint
+    - job: check:lint
+      optional: true
   tags:
     - windows
   before_script:
@@ -138,16 +142,16 @@ build:windows:
     paths:
       - ./prebuilds/
   rules:
-    - if: $CI_COMMIT_TAG
-      when: manual
-    - if: $CI_COMMIT_BRANCH == 'master'
-      when: manual
-    - if: $CI_COMMIT_BRANCH == 'staging'
+    # Runs on staging commits and ignores version commits
+    - if: $CI_COMMIT_BRANCH == 'staging' && $CI_COMMIT_TITLE !~ /^[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
+    # Runs on tag pipeline where the tag is a prerelease or release version
+    - if: $CI_COMMIT_TAG =~ /^v[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
 
 build:macos:
   stage: build
   needs:
-    - check:lint
+    - job: check:lint
+      optional: true
   tags:
     - shared-macos-amd64
   image: macos-11-xcode-12
@@ -174,11 +178,56 @@ build:macos:
     paths:
       - ./prebuilds/
   rules:
-    - if: $CI_COMMIT_TAG
-      when: manual
-    - if: $CI_COMMIT_BRANCH == 'master'
-      when: manual
-    - if: $CI_COMMIT_BRANCH == 'staging'
+    # Runs on staging commits and ignores version commits
+    - if: $CI_COMMIT_BRANCH == 'staging' && $CI_COMMIT_TITLE !~ /^[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
+    # Runs on tag pipeline where the tag is a prerelease or release version
+    - if: $CI_COMMIT_TAG =~ /^v[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
+
+build:prerelease:
+  stage: build
+  needs:
+    - build:linux
+    - build:windows
+    - build:macos
+  # Don't interrupt publishing job
+  interruptible: false
+  allow_failure: true
+  before_script:
+    - echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ./.npmrc
+  script:
+    - echo 'Publishing library prerelease'
+    - >
+        nix-shell --run '
+        npm publish --tag prerelease --access public;
+        '
+    - >
+      for d in prebuilds/*; do
+        tar \
+          --create \
+          --verbose \
+          --file="prebuilds/$(basename $d).tar" \
+          --directory=prebuilds \
+          "$(basename $d)";
+      done
+    - >
+        nix-shell -I nixpkgs=./pkgs.nix --packages git gitAndTools.gh --run '
+        gh release \
+          create "$CI_COMMIT_TAG" \
+          prebuilds/*.tar \
+          --title "Build-$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
+          --notes '' \
+          --prerelease \
+          --target staging \
+          --repo MatrixAI/TypeScript-Demo-Lib-Native;
+        '
+  after_script:
+    - rm -f ./.npmrc
+  rules:
+    # Only runs on tag pipeline where the tag is a prerelease version
+    # This requires dependencies to also run on tag pipeline
+    # However version tag comes with a version commit
+    # Dependencies must not run on the version commit
+    - if: $CI_COMMIT_TAG =~ /^v[0-9]+\.[0-9]+\.[0-9]+-.*[0-9]+$/
 
 integration:builds:
   stage: integration
@@ -213,16 +262,29 @@ integration:builds:
     paths:
       - ./builds/
   rules:
-    - if: $CI_COMMIT_TAG
-      when: manual
-    - if: $CI_COMMIT_BRANCH == 'master'
-      when: manual
-    - if: $CI_COMMIT_BRANCH == 'staging'
+    # Runs on staging commits and ignores version commits
+    - if: $CI_COMMIT_BRANCH == 'staging' && $CI_COMMIT_TITLE !~ /^[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
+    # Runs on tag pipeline where the tag is a prerelease or release version
+    - if: $CI_COMMIT_TAG =~ /^v[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
+
+integration:deployment:
+  stage: integration
+  needs:
+    - integration:builds
+  script:
+    - echo 'Perform service deployment for integration testing'
+  rules:
+    # Runs on staging commits and ignores version commits
+    - if: $CI_COMMIT_BRANCH == 'staging' && $CI_COMMIT_TITLE !~ /^[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
+    # Runs on tag pipeline where the tag is a prerelease or release version
+    - if: $CI_COMMIT_TAG =~ /^v[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
 
 integration:nix:
   stage: integration
   needs:
     - integration:builds
+    - job: integration:deployment
+      optional: true
   script:
     - >
         build_application="$( \
@@ -232,16 +294,17 @@ integration:nix:
         )"
     - $build_application/bin/typescript-demo-lib
   rules:
-    - if: $CI_COMMIT_TAG
-      when: manual
-    - if: $CI_COMMIT_BRANCH == 'master'
-      when: manual
-    - if: $CI_COMMIT_BRANCH == 'staging'
+    # Runs on staging commits and ignores version commits
+    - if: $CI_COMMIT_BRANCH == 'staging' && $CI_COMMIT_TITLE !~ /^[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
+    # Runs on tag pipeline where the tag is a prerelease or release version
+    - if: $CI_COMMIT_TAG =~ /^v[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
 
 integration:docker:
   stage: integration
   needs:
     - integration:builds
+    - job: integration:deployment
+      optional: true
   image: docker:20.10.11
   services:
     - docker:20.10.11-dind
@@ -253,76 +316,210 @@ integration:docker:
     - image="$(docker load --input ./builds/*docker* | cut -d' ' -f3)"
     - docker run "$image"
   rules:
-    - if: $CI_COMMIT_TAG
-      when: manual
-    - if: $CI_COMMIT_BRANCH == 'master'
-      when: manual
-    - if: $CI_COMMIT_BRANCH == 'staging'
+    # Runs on staging commits and ignores version commits
+    - if: $CI_COMMIT_BRANCH == 'staging' && $CI_COMMIT_TITLE !~ /^[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
+    # Runs on tag pipeline where the tag is a prerelease or release version
+    - if: $CI_COMMIT_TAG =~ /^v[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
 
 integration:linux:
   stage: integration
   needs:
     - integration:builds
+    - job: integration:deployment
+      optional: true
   image: ubuntu:latest
   script:
     - for f in ./builds/*-linux-*; do "$f"; done
   rules:
-    - if: $CI_COMMIT_TAG
-      when: manual
-    - if: $CI_COMMIT_BRANCH == 'master'
-      when: manual
-    - if: $CI_COMMIT_BRANCH == 'staging'
+    # Runs on staging commits and ignores version commits
+    - if: $CI_COMMIT_BRANCH == 'staging' && $CI_COMMIT_TITLE !~ /^[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
+    # Runs on tag pipeline where the tag is a prerelease or release version
+    - if: $CI_COMMIT_TAG =~ /^v[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
 
 integration:windows:
   stage: integration
   needs:
     - integration:builds
+    - job: integration:deployment
+      optional: true
   tags:
     - windows
   script:
     - Get-ChildItem -File ./builds/*-win-* | ForEach {& $_.FullName}
   rules:
-    - if: $CI_COMMIT_TAG
-      when: manual
-    - if: $CI_COMMIT_BRANCH == 'master'
-      when: manual
-    - if: $CI_COMMIT_BRANCH == 'staging'
+    # Runs on staging commits and ignores version commits
+    - if: $CI_COMMIT_BRANCH == 'staging' && $CI_COMMIT_TITLE !~ /^[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
+    # Runs on tag pipeline where the tag is a prerelease or release version
+    - if: $CI_COMMIT_TAG =~ /^v[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
 
 integration:macos:
   stage: integration
   needs:
     - integration:builds
+    - job: integration:deployment
+      optional: true
   tags:
     - shared-macos-amd64
   image: macos-11-xcode-12
   script:
     - for f in ./builds/*-macos-x64*; do "$f"; done
   rules:
-    - if: $CI_COMMIT_TAG
-      when: manual
-    - if: $CI_COMMIT_BRANCH == 'master'
-      when: manual
-    - if: $CI_COMMIT_BRANCH == 'staging'
+    # Runs on staging commits and ignores version commits
+    - if: $CI_COMMIT_BRANCH == 'staging' && $CI_COMMIT_TITLE !~ /^[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
+    # Runs on tag pipeline where the tag is a prerelease or release version
+    - if: $CI_COMMIT_TAG =~ /^v[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
 
-# packages:
-#   stage: release
-#   image: registry.gitlab.com/matrixai/engineering/maintenance/gitlab-runner
-#   dependencies:
-#     - nix
-#   script:
-#     - >
-#         nix-shell -I nixpkgs=./pkgs.nix --packages git gitAndTools.gh --run '
-#         commit="$(git rev-parse --short HEAD)";
-#         gh release \
-#           create "$commit" \
-#           builds/*.closure.gz \
-#           builds/*-linux-* \
-#           builds/*-win-* \
-#           builds/*-macos-* \
-#           --title "Build-$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
-#           --prerelease \
-#           --notes "" \
-#           --repo MatrixAI/TypeScript-Demo-Lib;
-#         '
-#   only:
-#     - master
+integration:prerelease:
+  stage: integration
+  needs:
+    - integration:builds
+    - job: integration:nix
+      optional: true
+    - job: integration:docker
+      optional: true
+    - job: integration:linux
+      optional: true
+    - job: integration:windows
+      optional: true
+    - job: integration:macos
+      optional: true
+  # Don't interrupt publishing job
+  interruptible: false
+  allow_failure: true
+  script:
+    - echo 'Publishing application prerelease'
+    - >
+        nix-shell -I nixpkgs=./pkgs.nix --packages git gitAndTools.gh --run '
+        if [ gh release view "$CI_COMMIT_TAG" >/dev/null 2>&1 ]; then
+          gh release \
+            upload "$CI_COMMIT_TAG" \
+            builds/*.closure.gz \
+            builds/*-docker-* \
+            builds/*-linux-* \
+            builds/*-win-* \
+            builds/*-macos-* \
+            --clobber \
+            --repo MatrixAI/TypeScript-Demo-Lib-Native;
+        else
+          gh release \
+            create "$CI_COMMIT_TAG" \
+            builds/*.closure.gz \
+            builds/*-docker-* \
+            builds/*-linux-* \
+            builds/*-win-* \
+            builds/*-macos-* \
+            --title "Build-$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
+            --notes '' \
+            --prerelease \
+            --target staging \
+            --repo MatrixAI/TypeScript-Demo-Lib-Native;
+        fi;
+        '
+  rules:
+    # Only runs on tag pipeline where the tag is a release version
+    # This requires dependencies to also run on tag pipeline
+    # However version tag comes with a version commit
+    # Dependencies must not run on the version commit
+    - if: $CI_COMMIT_TAG =~ /^v[0-9]+\.[0-9]+\.[0-9]+-.*[0-9]+$/
+
+integration:merge:
+  stage: integration
+  needs:
+    - job: integration:nix
+      optional: true
+    - job: integration:docker
+      optional: true
+    - job: integration:linux
+      optional: true
+    - job: integration:windows
+      optional: true
+    - job: integration:macos
+      optional: true
+  script:
+    - echo 'use gh to create and merge PR from staging to master'
+    - echo 'use github commit status to signal master to allow merge'
+  rules:
+    # Runs on staging commits and ignores version commits
+    - if: $CI_COMMIT_BRANCH == 'staging' && $CI_COMMIT_TITLE !~ /^[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
+    # Runs on tag pipeline where the tag is a prerelease or release version
+    - if: $CI_COMMIT_TAG =~ /^v[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
+
+release:deployment:
+  stage: release
+  needs:
+    - project: $CI_PROJECT_PATH
+      job: integration:builds
+      ref: staging
+      artifacts: true
+  script:
+    - echo 'Perform service deployment for production'
+  rules:
+    # Runs on master commits and ignores version commits
+    - if: $CI_COMMIT_BRANCH == 'master' && $CI_COMMIT_TITLE !~ /^[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
+    # Runs on tag pipeline where the tag is a release version
+    - if: $CI_COMMIT_TAG =~ /^v[0-9]+\.[0-9]+\.[0-9]+$/
+
+release:distribution:
+  stage: release
+  needs:
+    - project: $CI_PROJECT_PATH
+      job: build:linux
+      ref: staging
+      artifacts: true
+    - project: $CI_PROJECT_PATH
+      job: build:windows
+      ref: staging
+      artifacts: true
+    - project: $CI_PROJECT_PATH
+      job: build:macos
+      ref: staging
+      artifacts: true
+    - project: $CI_PROJECT_PATH
+      job: integration:builds
+      ref: staging
+      artifacts: true
+    - job: release:deployment
+      optional: true
+  # Don't interrupt publishing job
+  interruptible: false
+  allow_failure: true
+  before_script:
+    - echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ./.npmrc
+  script:
+    - echo 'Publishing library & application release'
+    - >
+        nix-shell --run '
+        npm publish --access public;
+        '
+    - >
+      for d in prebuilds/*; do
+        tar \
+          --create \
+          --verbose \
+          --file="prebuilds/$(basename $d).tar" \
+          --directory=prebuilds \
+          "$(basename $d)";
+      done
+    - >
+        nix-shell -I nixpkgs=./pkgs.nix --packages git gitAndTools.gh --run '
+        gh release \
+          create "$CI_COMMIT_TAG" \
+          prebuilds/*.tar \
+          builds/*.closure.gz \
+          builds/*-docker-* \
+          builds/*-linux-* \
+          builds/*-win-* \
+          builds/*-macos-* \
+          --title "Build-$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
+          --notes '' \
+          --target master \
+          --repo MatrixAI/TypeScript-Demo-Lib-Native;
+        '
+  after_script:
+    - rm -f ./.npmrc
+  rules:
+    # Only runs on tag pipeline where the tag is a release version
+    # This requires dependencies to also run on tag pipeline
+    # However version tag comes with a version commit
+    # Dependencies must not run on the version commit
+    - if: $CI_COMMIT_TAG =~ /^v[0-9]+\.[0-9]+\.[0-9]+$/

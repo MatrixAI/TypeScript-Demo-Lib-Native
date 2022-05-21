@@ -16,7 +16,7 @@ in
     PKG_CACHE_PATH = utils.pkgCachePath;
     PKG_IGNORE_TAG = 1;
     shellHook = ''
-      echo 'Entering Typescript-Demo-Lib'
+      echo 'Entering Typescript-Demo-Lib-Native'
       set -o allexport
       . ./.env
       set +o allexport
