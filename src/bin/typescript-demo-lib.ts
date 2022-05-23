@@ -10,10 +10,11 @@ import testUtpNative from '../lib/test-utp-native';
 import testWorkers from '../lib/workers/test-workers';
 import { testFdLock } from '../lib/test-fd-lock';
 import { version, test } from '../utils';
+import native from '../native';
 
 async function main(argv = process.argv): Promise<number> {
   // Print out command-line arguments
-  argv = argv.slice(2); // Removing prepended file paths.
+  argv = argv.slice(2); // Removing prepended file paths
   process.stdout.write('[' + argv.slice(0, 2).toString() + ']\n');
 
   // Create a new Library with the value someParam = 'new library'
@@ -41,6 +42,8 @@ async function main(argv = process.argv): Promise<number> {
 
   // Testing fd-lock
   await testFdLock(dir);
+
+  process.stdout.write(native.timesTwo(1) + '\n');
 
   process.exitCode = 0;
   return process.exitCode;
