@@ -1,6 +1,6 @@
-# TypeScript-Demo-Lib
+# TypeScript-Demo-Lib-Native
 
-[![pipeline status](https://gitlab.com/MatrixAI/open-source/TypeScript-Demo-Lib/badges/master/pipeline.svg)](https://gitlab.com/MatrixAI/open-source/TypeScript-Demo-Lib/commits/master)
+[![pipeline status](https://gitlab.com/MatrixAI/open-source/TypeScript-Demo-Lib-Native/badges/master/pipeline.svg)](https://gitlab.com/MatrixAI/open-source/TypeScript-Demo-Lib-Native/commits/master)
 
 ## Installation
 
@@ -174,7 +174,7 @@ This has to be done to both `node2nixProd` and `node2nixDev`.
 npm run docs
 ```
 
-See the docs at: https://matrixai.github.io/TypeScript-Demo-Lib/
+See the docs at: https://matrixai.github.io/TypeScript-Demo-Lib-Native/
 
 ### Publishing
 
