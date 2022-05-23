@@ -110,6 +110,7 @@ build:merge:
             --no-maintainer-edit \
             --repo MatrixAI/TypeScript-Demo-Lib-Native;
         fi;
+        '
   rules:
     # Runs on staging commits and ignores version commits
     - if: $CI_COMMIT_BRANCH == 'staging' && $CI_COMMIT_TITLE !~ /^[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
