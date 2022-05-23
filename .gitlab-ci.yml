@@ -112,6 +112,7 @@ build:merge:
         fi;
         gh pr merge staging \
           --auto \
+          --merge \
           --repo MatrixAI/TypeScript-Demo-Lib-Native;
         '
   rules:
