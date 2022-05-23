@@ -98,6 +98,7 @@ build:merge:
   interruptible: false
   allow_failure: true
   script:
+    - gh pr view staging --repo MatrixAI/TypeScript-Demo-Lib-Native
     - >
         nix-shell -I nixpkgs=./pkgs.nix --packages git gitAndTools.gh --run '
         if ! gh pr view staging --repo MatrixAI/TypeScript-Demo-Lib-Native >/dev/null 2>/dev/null; then \
