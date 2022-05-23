@@ -100,7 +100,7 @@ build:merge:
   script:
     - >
         nix-shell -I nixpkgs=./pkgs.nix --packages git gitAndTools.gh --run '
-        if [ ! gh pr view staging --repo MatrixAI/TypeScript-Demo-Lib-Native >/dev/null 2>/dev/null ]; then
+        if [ ! gh pr view staging --repo MatrixAI/TypeScript-Demo-Lib-Native >/dev/null 2>/dev/null ]; then \
           gh pr create \
             --head staging \
             --base master \
@@ -108,7 +108,7 @@ build:merge:
             --fill \
             --assignee '@me' \
             --no-maintainer-edit \
-            --repo MatrixAI/TypeScript-Demo-Lib-Native;
+            --repo MatrixAI/TypeScript-Demo-Lib-Native; \
         fi;
         '
   rules:
@@ -418,7 +418,7 @@ integration:prerelease:
     - echo 'Publishing application prerelease'
     - >
         nix-shell -I nixpkgs=./pkgs.nix --packages git gitAndTools.gh --run '
-        if [ gh release view "$CI_COMMIT_TAG" >/dev/null 2>&1 ]; then
+        if [ gh release view "$CI_COMMIT_TAG" >/dev/null 2>&1 ]; then \
           gh release \
             upload "$CI_COMMIT_TAG" \
             builds/*.closure.gz \
@@ -427,8 +427,8 @@ integration:prerelease:
             builds/*-win-* \
             builds/*-macos-* \
             --clobber \
-            --repo MatrixAI/TypeScript-Demo-Lib-Native;
-        else
+            --repo MatrixAI/TypeScript-Demo-Lib-Native; \
+        else \
           gh release \
             create "$CI_COMMIT_TAG" \
             builds/*.closure.gz \
@@ -440,7 +440,7 @@ integration:prerelease:
             --notes '' \
             --prerelease \
             --target staging \
-            --repo MatrixAI/TypeScript-Demo-Lib-Native;
+            --repo MatrixAI/TypeScript-Demo-Lib-Native; \
         fi;
         '
   rules:
