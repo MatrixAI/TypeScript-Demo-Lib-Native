@@ -7,8 +7,6 @@ workflow:
 
 default:
   interruptible: true
-  before_script:
-    - git remote add upstream https://github.com/MatrixAI/TypeScript-Demo-Lib-Native.git
 
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
@@ -99,6 +97,9 @@ build:merge:
   # Don't interrupt pr creation job
   interruptible: false
   allow_failure: true
+  before_script:
+    # Required for `gh pr create`
+    - git remote add upstream https://github.com/MatrixAI/TypeScript-Demo-Lib-Native.git
   script:
     - >
         nix-shell -I nixpkgs=./pkgs.nix --packages git gitAndTools.gh --run '
