@@ -109,7 +109,7 @@ build:merge:
           --body "" \
           --assignee "@me" \
           --no-maintainer-edit \
-          --repo MatrixAI/TypeScript-Demo-Lib-Native; \
+          --repo MatrixAI/TypeScript-Demo-Lib-Native || true;
         '
   rules:
     # Runs on staging commits and ignores version commits
