@@ -104,9 +104,9 @@ build:merge:
           gh pr create \
             --head staging \
             --base master \
-            --title 'Merge staging to master' \
+            --title "Merge staging to master" \
             --fill \
-            --assignee '@me' \
+            --assignee "@me" \
             --no-maintainer-edit \
             --repo MatrixAI/TypeScript-Demo-Lib-Native; \
         fi;
@@ -241,7 +241,7 @@ build:prerelease:
           create "$CI_COMMIT_TAG" \
           prebuilds/*.tar \
           --title "Build-$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
-          --notes '' \
+          --notes "" \
           --prerelease \
           --target staging \
           --repo MatrixAI/TypeScript-Demo-Lib-Native;
@@ -437,7 +437,7 @@ integration:prerelease:
             builds/*-win-* \
             builds/*-macos-* \
             --title "Build-$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
-            --notes '' \
+            --notes "" \
             --prerelease \
             --target staging \
             --repo MatrixAI/TypeScript-Demo-Lib-Native; \
@@ -550,7 +550,7 @@ release:distribution:
           builds/*-win-* \
           builds/*-macos-* \
           --title "Build-$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
-          --notes '' \
+          --notes "" \
           --target master \
           --repo MatrixAI/TypeScript-Demo-Lib-Native;
         '
