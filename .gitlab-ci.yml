@@ -108,8 +108,9 @@ build:merge:
           --assignee "@me" \
           --no-maintainer-edit \
           --repo MatrixAI/TypeScript-Demo-Lib-Native || true;
-        gh pr comment staging \
-          --body "Pipeline Attempt on ${CI_PIPELINE_ID} for ${CI_COMMIT_SHA}\n\n${CI_PIPELINE_URL}" \
+        printf "Pipeline Attempt on ${CI_PIPELINE_ID} for ${CI_COMMIT_SHA}\n\n${CI_PIPELINE_URL}" \
+        | gh pr comment staging \
+          --body-file - \
           --repo MatrixAI/TypeScript-Demo-Lib-Native;
         '
   rules:
@@ -482,8 +483,9 @@ integration:merge:
   script:
     - >
         nix-shell -I nixpkgs=./pkgs.nix --packages gitAndTools.gh --run '
-        gh pr comment staging \
-          --body "Pipeline Succeeded on ${CI_PIPELINE_ID} for ${CI_COMMIT_SHA}\n\n${CI_PIPELINE_URL}" \
+        printf "Pipeline Succeeded on ${CI_PIPELINE_ID} for ${CI_COMMIT_SHA}\n\n${CI_PIPELINE_URL}" \
+        | gh pr comment staging \
+          --body-file - \
           --repo MatrixAI/TypeScript-Demo-Lib-Native;
         '
     - git remote add upstream "https://${GITHUB_TOKEN}@github.com/MatrixAI/TypeScript-Demo-Lib-Native.git"
