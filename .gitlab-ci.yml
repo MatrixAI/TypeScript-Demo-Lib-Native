@@ -110,7 +110,7 @@ build:merge:
           --assignee "@me" \
           --no-maintainer-edit \
           --repo MatrixAI/TypeScript-Demo-Lib-Native || true;
-        gh pr comment \
+        gh pr comment staging \
           --body "Pipeline Attempt ${CI_PIPELINE_ID} - ${CI_PIPELINE_URL}" \
           --repo MatrixAI/TypeScript-Demo-Lib-Native;
         '
