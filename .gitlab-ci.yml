@@ -94,8 +94,6 @@ check:test:
 build:merge:
   stage: build
   needs: []
-  # Don't interrupt pr creation job
-  interruptible: false
   allow_failure: true
   script:
     # Required for `gh pr create`
@@ -220,7 +218,6 @@ build:prerelease:
     - build:macos
   # Don't interrupt publishing job
   interruptible: false
-  allow_failure: true
   before_script:
     - echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ./.npmrc
   script:
@@ -302,6 +299,8 @@ integration:deployment:
     - integration:builds
   # Don't interrupt deploying job
   interruptible: false
+  # Requires mutual exclusion
+  resource_group: integration:deployment
   script:
     - echo 'Perform service deployment for integration testing'
   rules:
@@ -416,7 +415,6 @@ integration:prerelease:
       optional: true
   # Don't interrupt publishing job
   interruptible: false
-  allow_failure: true
   script:
     - echo 'Publishing application prerelease'
     - >
@@ -447,7 +445,7 @@ integration:prerelease:
         fi;
         '
   rules:
-    # Only runs on tag pipeline where the tag is a release version
+    # Only runs on tag pipeline where the tag is a prerelease version
     # This requires dependencies to also run on tag pipeline
     # However version tag comes with a version commit
     # Dependencies must not run on the version commit
@@ -473,8 +471,8 @@ integration:merge:
     - job: integration:macos
       artifacts: false
       optional: true
-  # Don't interrupt pr merging job
-  interruptible: false
+  # Requires mutual exclusion
+  resource_group: integration:merge
   allow_failure: true
   variables:
     # Ensure that CI/CD is fetching all commits
@@ -490,7 +488,8 @@ integration:merge:
         '
     - git remote add upstream "https://${GITHUB_TOKEN}@github.com/MatrixAI/TypeScript-Demo-Lib-Native.git"
     - git checkout origin/master
-    - git merge --ff-only origin/staging
+    # Merge up to the current commit (not the latest commit)
+    - git merge --ff-only $CI_COMMIT_SHA
     - git push upstream HEAD:master
   rules:
     # Runs on staging commits and ignores version commits
@@ -509,6 +508,8 @@ release:deployment:
       artifacts: true
   # Don't interrupt deploying job
   interruptible: false
+  # Requires mutual exclusion
+  resource_group: release:deployment
   script:
     - echo 'Perform service deployment for production'
   rules:
@@ -542,7 +543,6 @@ release:distribution:
       artifacts: true
   # Don't interrupt publishing job
   interruptible: false
-  allow_failure: true
   before_script:
     - echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ./.npmrc
   script:
