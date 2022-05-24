@@ -97,10 +97,9 @@ build:merge:
   # Don't interrupt pr creation job
   interruptible: false
   allow_failure: true
-  before_script:
-    # Required for `gh pr create`
-    - git remote add upstream https://github.com/MatrixAI/TypeScript-Demo-Lib-Native.git
   script:
+    # Required for `gh pr create`
+    - git remote add upstream "https://${GITHUB_TOKEN}@github.com/MatrixAI/TypeScript-Demo-Lib-Native.git"
     - >
         nix-shell -I nixpkgs=./pkgs.nix --packages git gitAndTools.gh --run '
         gh pr create \
