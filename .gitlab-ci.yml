@@ -454,28 +454,36 @@ integration:prerelease:
 integration:merge:
   stage: integration
   needs:
-    - build:merge
+    - job: build:merge
+      artifacts: false
     - job: integration:nix
       optional: true
+      artifacts: false
     - job: integration:docker
       optional: true
+      artifacts: false
     - job: integration:linux
       optional: true
+      artifacts: false
     - job: integration:windows
       optional: true
+      artifacts: false
     - job: integration:macos
+      artifacts: false
       optional: true
   # Don't interrupt pr merging job
   interruptible: false
   allow_failure: true
+  variables:
+    # Ensure that CI/CD is fetching all commits
+    # this is necessary to checkout origin/master
+    # and to also merge origin/staging
+    GIT_DEPTH: 0
   script:
-    - >
-        nix-shell -I nixpkgs=./pkgs.nix --packages git gitAndTools.gh --run '
-        gh pr merge staging \
-          --auto \
-          --merge \
-          --repo MatrixAI/TypeScript-Demo-Lib-Native;
-        '
+    - git remote add upstream "https://${GITHUB_TOKEN}@github.com/MatrixAI/TypeScript-Demo-Lib-Native.git"
+    - git checkout origin/master
+    - git merge --ff-only origin/staging
+    - git push upstream HEAD:master
   rules:
     # Runs on staging commits and ignores version commits
     - if: $CI_COMMIT_BRANCH == 'staging' && $CI_COMMIT_TITLE !~ /^[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
