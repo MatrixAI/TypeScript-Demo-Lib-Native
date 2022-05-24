@@ -101,7 +101,7 @@ build:merge:
     # Required for `gh pr create`
     - git remote add upstream "https://${GITHUB_TOKEN}@github.com/MatrixAI/TypeScript-Demo-Lib-Native.git"
     - >
-        nix-shell -I nixpkgs=./pkgs.nix --packages git gitAndTools.gh --run '
+        nix-shell -I nixpkgs=./pkgs.nix --packages gitAndTools.gh --run '
         gh pr create \
           --head staging \
           --base master \
@@ -239,7 +239,7 @@ build:prerelease:
           "$(basename $d)";
       done
     - >
-        nix-shell -I nixpkgs=./pkgs.nix --packages git gitAndTools.gh --run '
+        nix-shell -I nixpkgs=./pkgs.nix --packages gitAndTools.gh --run '
         gh release \
           create "$CI_COMMIT_TAG" \
           prebuilds/*.tar \
@@ -420,7 +420,7 @@ integration:prerelease:
   script:
     - echo 'Publishing application prerelease'
     - >
-        nix-shell -I nixpkgs=./pkgs.nix --packages git gitAndTools.gh --run '
+        nix-shell -I nixpkgs=./pkgs.nix --packages gitAndTools.gh --run '
         if gh release view "$CI_COMMIT_TAG" --repo MatrixAI/TypeScript-Demo-Lib-Native >/dev/null; then \
           gh release \
             upload "$CI_COMMIT_TAG" \
@@ -486,6 +486,12 @@ integration:merge:
     - git checkout origin/master
     - git merge --ff-only origin/staging
     - git push upstream HEAD:master
+    - >
+        nix-shell -I nixpkgs=./pkgs.nix --packages gitAndTools.gh --run '
+        gh pr comment staging \
+          --body "Pipeline Succeeded ${CI_PIPELINE_ID} - ${CI_PIPELINE_URL}" \
+          --repo MatrixAI/TypeScript-Demo-Lib-Native;
+        '
   rules:
     # Runs on staging commits and ignores version commits
     - if: $CI_COMMIT_BRANCH == 'staging' && $CI_COMMIT_TITLE !~ /^[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
@@ -551,7 +557,7 @@ release:distribution:
           "$(basename $d)";
       done
     - >
-        nix-shell -I nixpkgs=./pkgs.nix --packages git gitAndTools.gh --run '
+        nix-shell -I nixpkgs=./pkgs.nix --packages gitAndTools.gh --run '
         gh release \
           create "$CI_COMMIT_TAG" \
           prebuilds/*.tar \
