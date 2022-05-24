@@ -489,7 +489,7 @@ integration:merge:
     - git remote add upstream "https://${GITHUB_TOKEN}@github.com/MatrixAI/TypeScript-Demo-Lib-Native.git"
     - git checkout origin/master
     # Merge up to the current commit (not the latest commit)
-    - git merge --ff-only $CI_COMMIT_SHA
+    - git merge --ff-only "$CI_COMMIT_SHA"
     - git push upstream HEAD:master
   rules:
     # Runs on staging commits and ignores version commits
