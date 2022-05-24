@@ -4,7 +4,7 @@ with pkgs;
 let
   utils = callPackage ./utils.nix {};
 in
-  mkShell.override { stdenv = multiStdenv; } {
+  mkShell {
     nativeBuildInputs = [
       nodejs
       nodejs.python

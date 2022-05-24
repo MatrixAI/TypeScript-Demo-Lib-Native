@@ -482,16 +482,16 @@ integration:merge:
     # and to also merge origin/staging
     GIT_DEPTH: 0
   script:
-    - git remote add upstream "https://${GITHUB_TOKEN}@github.com/MatrixAI/TypeScript-Demo-Lib-Native.git"
-    - git checkout origin/master
-    - git merge --ff-only origin/staging
-    - git push upstream HEAD:master
     - >
         nix-shell -I nixpkgs=./pkgs.nix --packages gitAndTools.gh --run '
         gh pr comment staging \
           --body "Pipeline Succeeded ${CI_PIPELINE_ID} - ${CI_PIPELINE_URL}" \
           --repo MatrixAI/TypeScript-Demo-Lib-Native;
         '
+    - git remote add upstream "https://${GITHUB_TOKEN}@github.com/MatrixAI/TypeScript-Demo-Lib-Native.git"
+    - git checkout origin/master
+    - git merge --ff-only origin/staging
+    - git push upstream HEAD:master
   rules:
     # Runs on staging commits and ignores version commits
     - if: $CI_COMMIT_BRANCH == 'staging' && $CI_COMMIT_TITLE !~ /^[0-9]+\.[0-9]+\.[0-9]+(?:-.*[0-9]+)?$/
@@ -501,6 +501,8 @@ integration:merge:
 release:deployment:
   stage: release
   needs:
+    - job: integration:merge
+      optional: true
     - project: $CI_PROJECT_PATH
       job: integration:builds
       ref: staging
@@ -518,6 +520,10 @@ release:deployment:
 release:distribution:
   stage: release
   needs:
+    - job: integration:merge
+      optional: true
+    - job: release:deployment
+      optional: true
     - project: $CI_PROJECT_PATH
       job: build:linux
       ref: staging
@@ -534,8 +540,6 @@ release:distribution:
       job: integration:builds
       ref: staging
       artifacts: true
-    - job: release:deployment
-      optional: true
   # Don't interrupt publishing job
   interruptible: false
   allow_failure: true
