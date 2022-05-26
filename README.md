@@ -1,6 +1,7 @@
 # TypeScript-Demo-Lib-Native
 
-[![pipeline status](https://gitlab.com/MatrixAI/open-source/TypeScript-Demo-Lib-Native/badges/master/pipeline.svg)](https://gitlab.com/MatrixAI/open-source/TypeScript-Demo-Lib-Native/commits/master)
+staging: [![pipeline status](https://gitlab.com/MatrixAI/open-source/TypeScript-Demo-Lib-Native/badges/staging/pipeline.svg)](https://gitlab.com/MatrixAI/open-source/TypeScript-Demo-Lib-Native/commits/staging)
+master: [![pipeline status](https://gitlab.com/MatrixAI/open-source/TypeScript-Demo-Lib-Native/badges/master/pipeline.svg)](https://gitlab.com/MatrixAI/open-source/TypeScript-Demo-Lib-Native/commits/master)
 
 ## Installation
 
