@@ -27,6 +27,7 @@
     "install": "node-gyp-build",
     "prebuild": "prebuildify --napi --strip --target=16.14.2",
     "build": "rimraf ./dist && tsc -p ./tsconfig.build.json",
+    "postversion": "npm install --package-lock-only --ignore-scripts --silent",
     "ts-node": "ts-node -r tsconfig-paths/register",
     "test": "jest",
     "lint": "eslint '{src,tests}/**/*.{js,ts}'",
