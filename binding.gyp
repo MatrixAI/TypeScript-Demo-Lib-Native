@@ -18,9 +18,18 @@
         },
       }],
       ['OS=="mac"', {
+        # OSX symbols are exported by default
+        # if 2 different copies of the same symbol appear in a process
+        # it can cause a conflict
+        # this prevents exporting the symbols
+        # the `+` prepends these flags
+        'cflags+': [ '-fvisibility=hidden' ],
+        'cflags_cc+': [ '-fvisibility=hidden' ],
         'xcode_settings': {
           # Minimum mac osx target version (matches node v16.14.2)
           'MACOSX_DEPLOYMENT_TARGET': '10.13',
+          # This is also needed to prevent exporting of symbols
+          'GCC_SYMBOLS_PRIVATE_EXTERN': 'YES',
           'OTHER_CFLAGS': [
             '-std=c99',
             '-arch x86_64',
