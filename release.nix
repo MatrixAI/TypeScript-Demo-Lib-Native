@@ -21,7 +21,7 @@ let
           ./prebuilds/
         npm run pkg -- \
           --output=out \
-          --executable=typescript-demo-lib \
+          --bin=typescript-demo-lib \
           --node-version=${utils.nodeVersion} \
           --platform=linux \
           --arch=${arch}
@@ -49,7 +49,7 @@ let
           ./prebuilds/
         npm run pkg -- \
           --output=out.exe \
-          --executable=typescript-demo-lib \
+          --bin=typescript-demo-lib \
           --node-version=${utils.nodeVersion} \
           --platform=win32 \
           --arch=${arch}
@@ -78,7 +78,7 @@ let
           ./prebuilds/
         npm run pkg -- \
           --output=out \
-          --executable=typescript-demo-lib \
+          --bin=typescript-demo-lib \
           --node-version=${utils.nodeVersion} \
           --platform=darwin \
           --arch=${arch}
