@@ -36,7 +36,7 @@
             '-arch arm64'
           ],
           'OTHER_CPLUSPLUSFLAGS': [
-            '-std=c++17'
+            '-std=c++17',
             '-arch x86_64',
             '-arch arm64'
           ],
