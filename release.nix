@@ -94,7 +94,10 @@ in
     docker = dockerTools.buildImage {
       name = application.name;
       contents = [ application ];
+      # This ensures symlinks to directories are preserved in the image
       keepContentsDirlinks = true;
+      # This adds a correct timestamp, however breaks binary reproducibility
+      created = "now";
       extraCommands = ''
         mkdir -m 1777 tmp
       '';

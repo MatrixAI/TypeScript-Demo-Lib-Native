@@ -8,7 +8,11 @@ in
     nativeBuildInputs = [
       nodejs
       nodejs.python
-      utils.node2nix
+      clang-tools
+      shellcheck
+      gitAndTools.gh
+      skopeo
+      jq
     ];
     # Don't set rpath for native addons
     NIX_DONT_SET_RPATH = true;
@@ -16,7 +20,7 @@ in
     PKG_CACHE_PATH = utils.pkgCachePath;
     PKG_IGNORE_TAG = 1;
     shellHook = ''
-      echo 'Entering Typescript-Demo-Lib-Native'
+      echo "Entering $(npm pkg get name)"
       set -o allexport
       . ./.env
       set +o allexport
@@ -27,14 +31,8 @@ in
       # Built executables and NPM executables
       export PATH="$(pwd)/dist/bin:$(npm bin):$PATH"
 
-      # Enables npm link
-      export npm_config_prefix=~/.npm
-
       # Path to headers used by node-gyp for native addons
       export npm_config_nodedir="${nodejs}"
-
-      # Use all cores during node-gyp compilation
-      export npm_config_jobs=max
 
       # Verbose logging of the Nix compiler wrappers
       export NIX_DEBUG=1
