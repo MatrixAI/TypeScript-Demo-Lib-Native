@@ -125,7 +125,8 @@ check:test:
   stage: check
   needs:
     - check:test-generate
-    - check:test-prebuild
+    - job: check:test-prebuild
+      artifacts: false
   trigger:
     include:
       - artifact: tmp/check-test.yml
@@ -287,9 +288,12 @@ build:platforms:
   stage: build
   needs:
     - build:platforms-generate
-    - build:linux-prebuild
-    - build:windows-prebuild
-    - build:macos-prebuild
+    - job: build:linux-prebuild
+      artifacts: false
+    - job: build:windows-prebuild
+      artifacts: false
+    - job: build:macos-prebuild
+      artifacts: false
   trigger:
     include:
       - artifact: tmp/build-platforms.yml
