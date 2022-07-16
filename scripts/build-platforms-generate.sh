@@ -55,7 +55,7 @@ build:linux:
   stage: build
   needs:
     - pipeline: $PARENT_PIPELINE_ID
-      job: check:linux-prebuild
+      job: build:linux-prebuild
 EOF
 cat << EOF
   parallel: $CI_PARALLEL
@@ -80,7 +80,7 @@ build:windows:
   stage: build
   needs:
     - pipeline: $PARENT_PIPELINE_ID
-      job: check:windows-prebuild
+      job: build:windows-prebuild
 EOF
 cat << EOF
   parallel: $CI_PARALLEL
@@ -110,7 +110,7 @@ build:macos:
   stage: build
   needs:
     - pipeline: $PARENT_PIPELINE_ID
-      job: check:macos-prebuild
+      job: build:macos-prebuild
 EOF
 cat << EOF
   parallel: $CI_PARALLEL
