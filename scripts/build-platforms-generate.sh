@@ -64,7 +64,7 @@ cat << "EOF"
   script:
     - >
       nix-shell --run '
-      npm test -- --ci --coverage --shard=$CI_NODE_INDEX/$CI_NODE_TOTAL;
+      npm test -- --ci --coverage --shard="$CI_NODE_INDEX/$CI_NODE_TOTAL";
       '
   artifacts:
     when: always
@@ -95,7 +95,7 @@ cat << "EOF"
     - refreshenv
     - npm install --ignore-scripts
     - $env:Path = "$(npm bin);" + $env:Path
-    - npm test -- --ci --coverage --shard=$CI_NODE_INDEX/$CI_NODE_TOTAL --maxWorkers=50%
+    - npm test -- --ci --coverage --shard="$CI_NODE_INDEX/$CI_NODE_TOTAL"
   artifacts:
     when: always
     reports:
@@ -125,7 +125,7 @@ cat << "EOF"
     - hash -r
     - npm install --ignore-scripts
     - export PATH="$(npm bin):$PATH"
-    - npm test -- --ci --coverage --shard=$CI_NODE_INDEX/$CI_NODE_TOTAL --maxWorkers=50%
+    - npm test -- --ci --coverage --shard="$CI_NODE_INDEX/$CI_NODE_TOTAL"
   artifacts:
     when: always
     reports:
