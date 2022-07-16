@@ -230,9 +230,6 @@ build:windows-prebuild:
     - npm run prebuild --verbose
   artifacts:
     when: always
-    reports:
-      junit:
-        - ./tmp/junit/junit.xml
     paths:
       - ./prebuilds/
   rules:
@@ -261,9 +258,6 @@ build:macos-prebuild:
     - npm run prebuild --verbose
   artifacts:
     when: always
-    reports:
-      junit:
-        - ./tmp/junit/junit.xml
     paths:
       - ./prebuilds/
   rules:
