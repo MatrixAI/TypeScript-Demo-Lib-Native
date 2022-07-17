@@ -59,7 +59,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^28.1.1",
     "jest-junit": "^14.0.0",
-    "jest-mock-process": "^1.4.1",
+    "jest-mock-process": "^2.0.0",
     "napi-macros": "^2.0.0",
     "node-gyp": "9.0.0",
     "pkg": "5.7.0",
