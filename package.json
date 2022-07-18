@@ -40,11 +40,8 @@
     "typescript-demo-lib": "ts-node src/bin/typescript-demo-lib.ts"
   },
   "dependencies": {
-    "fd-lock": "^1.2.0",
-    "level": "^7.0.0",
     "node-gyp-build": "^4.4.0",
     "threads": "^1.6.5",
-    "utp-native": "^2.5.3",
     "uuid": "^8.3.0"
   },
   "devDependencies": {
