@@ -76,12 +76,12 @@ describe('main', () => {
     expect(tmpMockLog).toContain('7657 + 238947 = 246604\n');
     mockLog.mockRestore();
   });
-  test('worker threads should work', async () => {
-    const mockLog = mockProcessStdout();
-    await main(['', '', '', '', dataDir]);
-    const tmpMockLog = mockLog.mock.calls.join('');
-    expect(tmpMockLog).toContain('Lets test workers.');
-    expect(tmpMockLog).toContain('Hello Worker!');
-    mockLog.mockRestore();
-  });
+  // test('worker threads should work', async () => {
+  //   const mockLog = mockProcessStdout();
+  //   await main(['', '', '', '', dataDir]);
+  //   const tmpMockLog = mockLog.mock.calls.join('');
+  //   expect(tmpMockLog).toContain('Lets test workers.');
+  //   expect(tmpMockLog).toContain('Hello Worker!');
+  //   mockLog.mockRestore();
+  // });
 });
