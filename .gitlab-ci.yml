@@ -53,6 +53,9 @@ check:lint:
   script:
     - >
         nix-shell --run '
+        set -o errexit;
+        set -o nounset;
+        set -o pipefail;
         npm run lint;
         npm run lint-native;
         npm run lint-shell;
@@ -152,6 +155,9 @@ build:merge:
     - git remote add upstream "$GH_PROJECT_URL"
     - >
       nix-shell --run '
+      set -o errexit;
+      set -o nounset;
+      set -o pipefail;
       gh pr create \
         --head staging \
         --base master \
@@ -177,7 +183,7 @@ build:dist:
   script:
     - >
       nix-shell --run '
-      npm run build --ignore-scripts --verbose;
+      npm run build --ignore-scripts --verbose
       '
   artifacts:
     when: always
@@ -198,7 +204,7 @@ build:linux-prebuild:
   script:
     - >
       nix-shell --run '
-      npm run prebuild --verbose;
+      npm run prebuild --verbose
       '
   artifacts:
     when: always
@@ -337,6 +343,9 @@ build:prerelease:
       done
     - >
       nix-shell --run '
+      set -o errexit;
+      set -o nounset;
+      set -o pipefail;
       gh release \
         create "$CI_COMMIT_TAG" \
         prebuilds/*.tar \
@@ -606,6 +615,9 @@ integration:merge:
   script:
     - >
       nix-shell --run '
+      set -o errexit;
+      set -o nounset;
+      set -o pipefail;
       printf "Pipeline Succeeded on ${CI_PIPELINE_ID} for ${CI_COMMIT_SHA}\n\n${CI_PIPELINE_URL}" \
       | gh pr comment staging \
         --body-file - \
@@ -676,7 +688,7 @@ release:distribution:
     - echo 'Publishing library & application release'
     - >
       nix-shell --run $'
-      npm publish --access public;
+      npm publish --access public
       '
     - >
       for d in prebuilds/*; do
@@ -689,6 +701,9 @@ release:distribution:
       done
     - >
       nix-shell --run $'
+      set -o errexit;
+      set -o nounset;
+      set -o pipefail;
       gh release \
         create "$CI_COMMIT_TAG" \
         prebuilds/*.tar \
@@ -705,6 +720,9 @@ release:distribution:
     - echo 'Releasing container image'
     - >
       nix-shell --run $'
+      set -o errexit;
+      set -o nounset;
+      set -o pipefail;
       skopeo login \
         --username "$CI_REGISTRY_USER" \
         --password "$CI_REGISTRY_PASSWORD" \
