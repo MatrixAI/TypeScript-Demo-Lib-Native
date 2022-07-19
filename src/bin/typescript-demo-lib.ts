@@ -32,7 +32,7 @@ async function main(argv = process.argv): Promise<number> {
   process.stdout.write(nums.num1 + ' + ' + nums.num2 + ' = ' + sum + '\n');
 
   // Testing workers
-  // await testWorkers();
+  await testWorkers();
 
   process.stdout.write(version + '\n');
   process.stdout.write(test.toString() + '\n');
